@@ -1,0 +1,90 @@
+<div class="container-fluid px-4 px-lg-5 mt-4">
+    <!-- Hero/Banner Section -->
+    <div class="hero-section mb-5 p-5 rounded-4 text-center">
+        <div class="hero-content fade-in">
+            <h1 class="display-3 fw-bold text-white mb-2">Cinema Reimagined</h1>
+            <p class="text-white-50 lead fs-4">Explore the latest blockbusters in premium comfort.</p>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-container mb-5 shadow-lg fade-in">
+        <div class="row align-items-end g-3">
+            <div class="col-md-3">
+                <label class="form-label text-white-50 small text-uppercase">Genre</label>
+                <select class="form-select custom-select" [(ngModel)]="filterGenre" (change)="applyFilter()">
+                    <option value="">All Genres</option>
+                    <option *ngFor="let g of genres" [value]="g.name">{{ g.name }} <span class="text-muted">({{ g.count
+                            }})</span></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-white-50 small text-uppercase">Language</label>
+                <select class="form-select custom-select" [(ngModel)]="filterLanguage" (change)="applyFilter()">
+                    <option value="">All Languages</option>
+                    <option *ngFor="let l of languages" [value]="l.name">{{ l.name }} ({{ l.count }})</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-white-50 small text-uppercase">Minimum Rating</label>
+                <select class="form-select custom-select" [(ngModel)]="filterRating" (change)="applyFilter()">
+                    <option [ngValue]="null">Any Rating</option>
+                    <option [ngValue]="4">⭐⭐⭐⭐ & Up (Excellent)</option>
+                    <option [ngValue]="3">⭐⭐⭐ & Up (Good)</option>
+                    <option [ngValue]="2">⭐⭐ & Up (Average)</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-clear w-100 py-2 d-flex align-items-center justify-content-center gap-2"
+                    (click)="filterGenre='';filterLanguage='';filterRating=null;loadMovies()">
+                    <i class="bi bi-x-circle"></i> Clear Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error/Loading State -->
+    <div *ngIf="loading" class="text-center text-white py-5">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted">Loading Movies...</p>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+    <!-- No Movies Found State -->
+    <div *ngIf="!loading && movies.length === 0 && !error" class="text-center text-secondary py-5 glass-card">
+        <i class="bi bi-camera-reels display-1 mb-3 text-white-50"></i>
+        <h3 class="text-white">No Movies Found</h3>
+        <p>Try adjusting your filters to find what you're looking for.</p>
+        <button class="btn btn-primary mt-3 px-4 rounded-pill"
+            (click)="filterGenre='';filterLanguage='';filterRating=null;loadMovies()">View All Movies</button>
+    </div>
+
+    <!-- Movie Grid -->
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3 g-md-4 mb-5" *ngIf="!loading">
+        <div class="col fade-in-up" *ngFor="let movie of movies; let i = index"
+            [style.animation-delay]="i * 0.05 + 's'">
+            <div class="card movie-card h-100 border-0" [routerLink]="['/movie', movie.id]">
+                <img [src]="movie.imageUrl" class="card-img-top movie-poster" alt="{{ movie.title }}" loading="lazy">
+
+                <!-- Overlay Content -->
+                <div class="card-body d-flex flex-column justify-content-end">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-primary text-white">{{ movie.genre }}</span>
+                        <div class="text-warning small fw-bold bg-dark px-2 py-1 rounded-pill bg-opacity-75">
+                            <i class="bi bi-star-fill"></i> {{ movie.averageRating || 'N/A' }}
+                        </div>
+                    </div>
+
+                    <h5 class="card-title text-white text-truncate">{{ movie.title }}</h5>
+                    <p class="card-text text-white-50 small mb-2"><i class="bi bi-translate me-1"></i> {{ movie.language
+                        }}</p>
+
+                    <button class="btn btn-action w-100 py-2">Book Now <i class="bi bi-ticket-fill ms-1"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

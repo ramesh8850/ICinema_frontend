@@ -1,0 +1,81 @@
+<div class="container mt-5">
+    <div *ngIf="loading" class="text-center text-white">
+        <div class="spinner-border" role="status"></div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+    <div *ngIf="ticket && !loading" class="ticket-container animated-entry">
+        <!-- Ticket Header -->
+        <div class="ticket-header p-4 bg-primary-gradient text-white">
+            <h2 class="mb-0 text-center"><i class="bi bi-ticket-perforated"></i> Your Ticket</h2>
+            <div class="text-center mt-2 small text-uppercase letter-spacing">Booking ID: #{{ ticket.id || bookingId }}
+            </div>
+        </div>
+
+        <!-- Ticket Body -->
+        <div class="ticket-body p-4 bg-dark-card">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img [src]="ticket.moviePosterUrl || 'assets/placeholder.jpg'"
+                        class="img-fluid rounded poster-small mb-3" alt="Movie Poster">
+                </div>
+                <div class="col-md-8">
+                    <h3 class="text-white fw-bold">{{ ticket.movieTitle }}</h3>
+                    <p class="text-muted"><i class="bi bi-geo-alt"></i> {{ ticket.theatreName }}, {{ ticket.city }}</p>
+
+                    <div class="row mt-4">
+                        <div class="col-6 mb-3">
+                            <small class="text-muted d-block text-uppercase">Date</small>
+                            <span class="text-white fw-bold">{{ ticket.showDate }}</span>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <small class="text-muted d-block text-uppercase">Time</small>
+                            <span class="text-accent fw-bold">{{ ticket.showTime }}</span>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <small class="text-muted d-block text-uppercase">Screen</small>
+                            <span class="text-white">{{ ticket.screenName || 'Screen 1' }}</span>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <small class="text-muted d-block text-uppercase">Seats</small>
+                            <span class="text-accent fw-bold">{{ ticket.seatNumbers.join(', ') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="booking-summary mt-3 p-3 rounded bg-void border border-secondary">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted">Seat Cost</span>
+                            <span class="text-white">₹{{ ticket.seatCost }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted">Conv. Fee</span>
+                            <span class="text-white">₹{{ ticket.convenienceFee }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted">GST</span>
+                            <span class="text-white">₹{{ ticket.gst }}</span>
+                        </div>
+                        <hr class="bg-secondary">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-accent fw-bold">Total Paid</span>
+                            <span class="text-accent fw-bold fs-5">₹{{ ticket.totalAmount }}</span>
+                        </div>
+                        <div class="mt-2 text-center text-success small">
+                            <i class="bi bi-check-circle-fill"></i> Paid (TXN: {{ ticket.transactionId }})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ticket Footer -->
+        <div
+            class="ticket-footer p-3 bg-dark-theme text-center border-top border-secondary d-flex justify-content-center gap-3">
+            <button class="btn btn-outline-light" (click)="printTicket()">
+                <i class="bi bi-printer"></i> Print
+            </button>
+            <a routerLink="/home" class="btn btn-primary">Go Home</a>
+        </div>
+    </div>
+</div>

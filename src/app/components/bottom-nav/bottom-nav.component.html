@@ -1,0 +1,35 @@
+<div class="bottom-nav d-mobile-only fixed-bottom bg-card border-top border-secondary">
+    <div class="d-flex justify-content-around align-items-center py-2">
+        <a routerLink="/home" routerLinkActive="active" class="nav-item text-center text-decoration-none">
+            <i class="bi bi-house-door fs-4"></i>
+            <span class="d-block small">Home</span>
+        </a>
+
+        <a (click)="toggleSearch()" class="nav-item text-center text-decoration-none pointer">
+            <i class="bi bi-search fs-4"></i>
+            <span class="d-block small">Search</span>
+        </a>
+
+        <a routerLink="/login" *ngIf="!isLoggedIn" routerLinkActive="active"
+            class="nav-item text-center text-decoration-none">
+            <i class="bi bi-person fs-4"></i>
+            <span class="d-block small">Login</span>
+        </a>
+
+        <a routerLink="/profile" *ngIf="isLoggedIn" routerLinkActive="active"
+            class="nav-item text-center text-decoration-none">
+            <i class="bi bi-person-circle fs-4"></i>
+            <span class="d-block small">Profile</span>
+        </a>
+    </div>
+</div>
+
+<!-- Mobile Search Overlay (Simple implementation) -->
+<div *ngIf="showSearch" class="search-overlay d-mobile-only fade-in p-3 bg-void fixed-top h-100" style="z-index: 2000;">
+    <div class="d-flex align-items-center mb-3">
+        <input type="text" class="form-control me-2" placeholder="Search movies..." [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearch()">
+        <button class="btn btn-link text-white" (click)="toggleSearch()">Cancel</button>
+    </div>
+    <button class="btn btn-primary w-100" (click)="onSearch()">Search</button>
+</div>

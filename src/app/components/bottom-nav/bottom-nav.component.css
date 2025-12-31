@@ -1,0 +1,30 @@
+.bottom-nav {
+    background-color: var(--bg-card);
+    backdrop-filter: blur(10px);
+    z-index: 1030;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.nav-item {
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+    flex: 1;
+}
+
+.nav-item.active,
+.nav-item:active {
+    color: var(--primary-brand);
+}
+
+.nav-item i {
+    margin-bottom: -2px;
+}
+
+.nav-item span {
+    font-size: 0.7rem;
+    margin-top: 2px;
+}
+
+.pointer {
+    cursor: pointer;
+}

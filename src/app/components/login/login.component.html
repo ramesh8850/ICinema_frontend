@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="auth-container">
+        <h2 class="auth-header">Login to iCinema</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label for="email" class="form-label text-muted">Email address</label>
+                <input type="email" class="form-control" id="email" formControlName="email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label text-muted">Password</label>
+                <input type="password" class="form-control" id="password" formControlName="password">
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger p-2 mb-3">
+                {{ errorMessage }}
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button>
+        </form>
+        <p class="text-center mt-3 text-muted">
+            New here? <a routerLink="/register" class="auth-link">Create an account</a>
+        </p>
+    </div>
+</div>

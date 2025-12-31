@@ -1,0 +1,37 @@
+.bg-dark-theme {
+    background-color: var(--bg-card);
+    /* Using global variable */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.brand-text {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-brand) !important;
+    text-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
+}
+
+.nav-link {
+    color: var(--text-muted) !important;
+    transition: color 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--text-main) !important;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.btn-logout {
+    cursor: pointer;
+    color: #ff4757 !important;
+}
+
+.btn-login {
+    color: var(--accent-neon) !important;
+}
+
+.navbar {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

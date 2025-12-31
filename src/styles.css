@@ -1,0 +1,134 @@
+/* Import Bootstrap */
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+/* Design System: Electric Midnight */
+:root {
+    --bg-void: #0B0C15;
+    --bg-card: #1A1B29;
+    --primary-brand: #6C63FF;
+    /* Electric Indigo */
+    --accent-neon: #00F5D4;
+    /* Neon Mint */
+    --text-main: #FFFFFF;
+    --text-muted: #D1D1DB;
+    /* Lighter grey for better visibility */
+
+    --status-available: #2D2D3D;
+    --status-booked: #FF4757;
+    --status-selected: #00F5D4;
+}
+
+/* Custom Background Utilities */
+.bg-void {
+    background-color: var(--bg-void) !important;
+}
+
+.bg-card {
+    background-color: var(--bg-card) !important;
+}
+
+.bg-dark-theme {
+    background-color: #0B0C15 !important;
+}
+
+body {
+    background-color: var(--bg-void);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-void);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-card);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-brand);
+}
+
+/* --- Global Overrides for Visibility --- */
+
+/* Standardize Text Colors */
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Form Labels - Make them pop */
+.form-label {
+    color: var(--text-muted);
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* Inputs - clear background contrast */
+.form-control {
+    background-color: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+.form-control:focus {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border-color: var(--primary-brand);
+    box-shadow: 0 0 0 0.2rem rgba(108, 99, 255, 0.25);
+}
+
+/* Placeholders */
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Card Text */
+/* --- Mobile Design Overrides --- */
+:root {
+    --bottom-nav-height: 60px;
+}
+
+/* Utilities for visibility */
+.d-mobile-only {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+
+    /* Show mobile elements */
+    .d-mobile-only {
+        display: block !important;
+    }
+
+    .d-mobile-flex {
+        display: flex !important;
+    }
+
+    /* Hide desktop elements */
+    .d-desktop-only {
+        display: none !important;
+    }
+
+    /* Adjust specific containers */
+    .main-container {
+        padding-bottom: var(--bottom-nav-height) !important;
+        /* Space for bottom nav */
+    }
+
+    /* Typography Adjustments */
+    h1.display-3 {
+        font-size: 2.5rem;
+    }
+
+    /* Hero Section Padding */
+    .hero-section {
+        padding: 2rem !important;
+    }
+}

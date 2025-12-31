@@ -1,0 +1,87 @@
+.poster-large {
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    max-height: 600px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #d1d1d1 !important;
+}
+
+.show-card {
+    background-color: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 140px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.show-card:hover {
+    border-color: var(--accent-neon);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 245, 212, 0.1);
+}
+
+.text-accent {
+    color: var(--accent-neon);
+    font-weight: 700;
+}
+
+.btn-outline-accent {
+    color: var(--accent-neon);
+    border-color: var(--accent-neon);
+}
+
+.btn-outline-accent:hover {
+    background-color: var(--accent-neon);
+    color: #000;
+}
+
+/* Reviews Styling */
+.avatar-circle {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary-accent), var(--accent-neon));
+    color: #000;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-transform: uppercase;
+}
+
+.review-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.review-card:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.star-rating i {
+    color: #ffc107;
+    font-size: 0.9rem;
+    margin-right: 2px;
+}
+
+.review-form-card {
+    background: linear-gradient(to bottom right, #2a2a35, #1f1f25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #222;
+    color: #fff;
+    border-color: var(--accent-neon);
+    box-shadow: 0 0 0 0.25rem rgba(0, 245, 212, 0.25);
+}

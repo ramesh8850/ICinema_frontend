@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark-theme sticky-top d-desktop-only">
+    <div class="container-fluid">
+        <a class="navbar-brand brand-text" routerLink="/home">iCinema</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Left Side -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="authService.isLoggedIn()">
+                <li class="nav-item">
+                    <a class="nav-link active" routerLink="/home">Movies</a>
+                </li>
+            </ul>
+
+            <!-- Search Bar -->
+            <form class="d-flex me-3" role="search" (ngSubmit)="onSearch()" *ngIf="authService.isLoggedIn()">
+                <input class="form-control me-2" type="search" placeholder="Search movies..." aria-label="Search"
+                    [(ngModel)]="searchQuery" name="search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+
+            <!-- Right Side (User/Auth) -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" *ngIf="!authService.isLoggedIn()">
+                    <a class="nav-link btn-login" routerLink="/login">Login</a>
+                </li>
+                <li class="nav-item" *ngIf="!authService.isLoggedIn()">
+                    <a class="nav-link btn-register" routerLink="/register">Register</a>
+                </li>
+                <li class="nav-item" *ngIf="authService.isLoggedIn()">
+                    <a class="nav-link disabled text-light">Welcome, {{ authService.getUser()?.username }}</a>
+                </li>
+                <li class="nav-item" *ngIf="authService.isLoggedIn()">
+                    <a class="nav-link btn-logout" (click)="logout()">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

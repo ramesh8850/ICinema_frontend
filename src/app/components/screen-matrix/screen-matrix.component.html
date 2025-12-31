@@ -1,0 +1,87 @@
+<div class="container-fluid screen-matrix-container px-0" *ngIf="movie">
+
+    <!-- Hero Header -->
+    <div class="movie-header mb-5">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <a [routerLink]="['/movie', movie.id]"
+                    class="btn btn-link text-decoration-none text-secondary back-btn p-0 me-4">
+                    <i class="bi bi-arrow-left fs-4"></i>
+                </a>
+                <div>
+                    <h1 class="display-5 fw-bold text-white mb-1">{{ movie.title }}</h1>
+                    <div class="d-flex align-items-center gap-3 text-muted small">
+                        <span><i class="bi bi-calendar-event me-1"></i> {{ movie.releaseDate | date:'mediumDate'
+                            }}</span>
+                        <span>|</span>
+                        <span><i class="bi bi-clock me-1"></i> {{ movie.durationMinutes }} mins</span>
+                        <span>|</span>
+                        <span class="badge bg-secondary">{{ movie.genre }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+
+        <div *ngIf="loading" class="text-center my-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Finding best shows for you...</p>
+        </div>
+
+        <!-- No Shows State -->
+        <div *ngIf="!loading && shows.length === 0" class="text-center py-5">
+            <div class="mb-3 text-secondary opacity-25">
+                <i class="bi bi-calendar-x display-1"></i>
+            </div>
+            <h3 class="text-white">No Shows Available</h3>
+            <p class="text-muted">We couldn't find any showtimes for this movie right now.</p>
+        </div>
+
+        <!-- Matrix Content -->
+        <div *ngIf="!loading && shows.length > 0">
+            <h6 class="section-title mb-4">Select Theatre & Time</h6>
+
+            <div class="row g-4">
+                <!-- Iterate through grouped shows -->
+                <div class="col-12" *ngFor="let group of groupedShows | keyvalue">
+                    <div class="theatre-card">
+                        <!-- Theatre Header -->
+                        <div class="card-header-pulse d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-dark rounded-circle p-2 me-3 border border-secondary">
+                                    <i class="bi bi-film text-danger fs-5"></i>
+                                </div>
+                                <div>
+                                    <h5 class="text-white m-0 fw-bold">{{ group.key }}</h5>
+                                    <small class="text-success"
+                                        *ngIf="group.key.includes('PVR') || group.key.includes('INOX')">
+                                        <i class="bi bi-phone"></i> M-Ticket Available
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="badge badge-soft-gold p-2">
+                                <i class="bi bi-star-fill"></i> Premium
+                            </div>
+                        </div>
+
+                        <!-- Shows Grid -->
+                        <div class="card-body p-4 bg-dark">
+                            <div class="d-flex flex-wrap gap-3">
+                                <ng-container *ngFor="let show of group.value">
+                                    <button [routerLink]="['/booking', show.id]"
+                                        class="showtime-btn p-3 d-flex flex-column align-items-center justify-content-center text-decoration-none">
+                                        <span class="fw-bold fs-5">{{ show.showTime }}</span>
+                                        <span class="small opacity-75 mt-1">{{ show.screenName }}</span>
+                                        <!-- Fallback usage as 'Screen Type' -->
+                                    </button>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

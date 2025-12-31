@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="auth-container">
+        <h2 class="auth-header">Join iCinema</h2>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label for="username" class="form-label text-muted">Username</label>
+                <input type="text" class="form-control" id="username" formControlName="username">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label text-muted">Email address</label>
+                <input type="email" class="form-control" id="email" formControlName="email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label text-muted">Password</label>
+                <input type="password" class="form-control" id="password" formControlName="password">
+            </div>
+            <div class="mb-3">
+                <label for="mobileNumber" class="form-label text-muted">Mobile Number</label>
+                <input type="tel" class="form-control" id="mobileNumber" formControlName="mobileNumber">
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger p-2 mb-3">
+                {{ errorMessage }}
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Register</button>
+        </form>
+        <p class="text-center mt-3 text-muted">
+            Already have an account? <a routerLink="/login" class="auth-link">Login</a>
+        </p>
+    </div>
+</div>

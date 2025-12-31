@@ -1,0 +1,165 @@
+/* booking.component.css */
+
+/* Background & Containers */
+.booking-container {
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #1a2a3a 0%, #0d0d0d 100%);
+    color: #fff;
+    padding-bottom: 5rem;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Header */
+.booking-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Stepper Control ([ - 1 + ]) */
+.stepper-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: white;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.stepper-btn:hover:not(:disabled) {
+    border-color: var(--bs-primary);
+    background: var(--bs-primary);
+    color: white;
+}
+
+.stepper-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* NEW: Input inside stepper */
+.stepper-input {
+    width: 60px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    -moz-appearance: textfield;
+    /* Remove arrows */
+}
+
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.stepper-input:focus {
+    border-bottom: 2px solid var(--bs-primary);
+}
+
+/* Price Tiers */
+.price-tier-item {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s;
+}
+
+.price-tier-item:last-child {
+    border-bottom: none;
+}
+
+.price-tier-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Seat Matrix Styles (Preserving existing logic) */
+.screen-visual {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+    height: 60px;
+    width: 80%;
+    margin: 0 auto;
+    border-top: 4px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50% 50% 0 0 / 20px 20px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 -10px 20px rgba(255, 255, 255, 0.05);
+}
+
+.seat-box {
+    width: 35px;
+    height: 35px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+    background: #2c2c2c;
+    color: #aaa;
+    font-weight: bold;
+}
+
+/* STRICT US-07: Available = Green */
+.seat-box.available {
+    background-color: transparent;
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.seat-box.available:hover {
+    background-color: #28a745;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+}
+
+/* STRICT US-07: Selected = Yellow */
+.seat-box.selected {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+    /* Black text on yellow for contrast */
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+    transform: scale(1.1);
+}
+
+/* STRICT US-07: Booked = Red */
+.seat-box.booked {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Legend update helper */
+.legend-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
