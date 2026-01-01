@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/users';
+  private apiUrl = `${environment.apiUrl}/users`;
 
   private loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.loggedInSubject.asObservable();
@@ -24,8 +25,18 @@ export class AuthService {
 
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
-      tap(() => this.loggedInSubject.next(true))
+      tap((response: any) => {
+        if (response.data && response.data.token) {
+          sessionStorage.setItem('token', response.data.token);
+          sessionStorage.setItem('user', JSON.stringify(response.data.user));
+          this.loggedInSubject.next(true);
+        }
+      })
     );
+  }
+
+  getToken(): string | null {
+    return sessionStorage.getItem('token');
   }
 
   isLoggedIn(): boolean {
@@ -39,6 +50,7 @@ export class AuthService {
 
   logout() {
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
     this.loggedInSubject.next(false);
   }
 }
