@@ -235,7 +235,24 @@ export class BookingComponent implements OnInit {
       return;
     }
 
-    const userId = this.authService.getUser().id; // Assuming user object has id
+    const user = this.authService.getUser();
+
+    if (!user) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // Robust ID extraction: Handle direct id or nested user.id (stale data case)
+    let userId = user.id;
+    if (!userId && user.user && user.user.id) {
+      userId = user.user.id;
+    }
+
+    if (!userId) {
+      alert('Authentication error: User ID missing. Please Logout and Login again.');
+      return;
+    }
+
     const bookingPayload = {
       userId: userId,
       showId: this.showId,
