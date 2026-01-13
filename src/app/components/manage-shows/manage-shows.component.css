@@ -1,0 +1,67 @@
+.form-container {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    padding: 20px;
+}
+
+.form-card {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    width: 600px;
+    max-width: 100%;
+}
+
+.neon-text {
+    color: #00fff2;
+    text-shadow: 0 0 10px rgba(0, 255, 242, 0.8);
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.custom-input {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.custom-input:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #00fff2;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(0, 255, 242, 0.5);
+}
+
+/* Fix dropdown option text color */
+.custom-input option {
+    background-color: #302b63;
+    color: #fff;
+}
+
+.btn-neon {
+    background: linear-gradient(90deg, #ff00cc, #333399);
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+
+.btn-neon:hover {
+    box-shadow: 0 0 15px rgba(255, 0, 204, 0.8);
+    transform: scale(1.02);
+}
+
+.btn-neon:disabled {
+    background: #555;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.text-light {
+    color: #e0e0e0 !important;
+}

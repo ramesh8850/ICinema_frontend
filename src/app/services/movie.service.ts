@@ -28,6 +28,19 @@ export class MovieService {
     if (genre) params += `genre=${genre}&`;
     if (language) params += `language=${language}&`;
     if (rating) params += `rating=${rating}`;
+    if (rating) params += `rating=${rating}`;
     return this.http.get(`${this.apiUrl}/filter?${params}`);
+  }
+
+  addMovie(movie: any): Observable<any> {
+    return this.http.post(this.apiUrl, movie);
+  }
+
+  updateMovie(id: number, movie: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, movie);
+  }
+
+  deleteMovie(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

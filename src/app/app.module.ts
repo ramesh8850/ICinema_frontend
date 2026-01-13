@@ -16,6 +16,10 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ScreenMatrixComponent } from './components/screen-matrix/screen-matrix.component';
 import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component';
+import { AddMovieComponent } from './components/add-movie/add-movie.component';
+import { ManageShowsComponent } from './components/manage-shows/manage-shows.component';
+import { ManageScreensComponent } from './components/manage-screens/manage-screens.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,12 @@ import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component
     LoginComponent,
     RegisterComponent,
     ScreenMatrixComponent,
-    BottomNavComponent
+    BottomNavComponent,
+    AddMovieComponent,
+    AddMovieComponent,
+    ManageShowsComponent,
+    ManageScreensComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,

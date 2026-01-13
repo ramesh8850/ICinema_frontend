@@ -22,4 +22,8 @@ export class ShowService {
     getShowById(showId: number): Observable<any> {
         return this.http.get(`${this.apiUrl}/id/${showId}`);
     }
+
+    addShow(show: any): Observable<any> {
+        return this.http.post(this.apiUrl, show);
+    }
 }

@@ -191,7 +191,8 @@ export class BookingComponent implements OnInit {
   toggleSeat(seat: any) {
     if (seat.status === 'BOOKED' || seat.status === 'BLOCKED') return;
 
-    const index = this.selectedSeats.findIndex(s => s.id === seat.id);
+    // Use seatId (Physical ID) for unique identification, as 'id' (ShowSeat ID) is null for available seats
+    const index = this.selectedSeats.findIndex(s => s.seatId === seat.seatId);
     if (index === -1) {
       // Logic for adding seat: enforce limit from Stage 1
       if (this.selectedSeats.length < this.seatQuantity) {
@@ -219,7 +220,7 @@ export class BookingComponent implements OnInit {
   }
 
   isSelected(seat: any): boolean {
-    return this.selectedSeats.some(s => s.id === seat.id);
+    return this.selectedSeats.some(s => s.seatId === seat.seatId);
   }
 
   proceedToBook() {
@@ -256,7 +257,7 @@ export class BookingComponent implements OnInit {
     const bookingPayload = {
       userId: userId,
       showId: this.showId,
-      showSeatIds: this.selectedSeats.map(s => s.id)
+      showSeatIds: this.selectedSeats.map(s => s.seatId)
     };
 
     this.bookingService.createBooking(bookingPayload).subscribe({

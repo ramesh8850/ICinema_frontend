@@ -26,6 +26,7 @@ export class AuthService {
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
       tap((response: any) => {
+        console.log('DEBUG: Full Login Response:', response); // Inspect this!
         if (response.data && response.data.token) {
           sessionStorage.setItem('token', response.data.token);
           sessionStorage.setItem('user', JSON.stringify(response.data.user));
@@ -41,6 +42,22 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.loggedInSubject.value;
+  }
+
+  isAdmin(): boolean {
+    const user = this.getUser();
+    console.log('DEBUG: Checking Admin. User Object:', user);
+
+    // Handle nested 'user' object if it exists (Defensive fix for inconsistent backend response)
+    const actualUser = user && user.user ? user.user : user;
+    const roles = actualUser ? actualUser.roles : [];
+
+    console.log('DEBUG: Actual User Roles:', roles);
+
+    const hasRole = roles && (roles.includes('ROLE_ADMIN') || roles.some((r: any) => r.name === 'ROLE_ADMIN' || r === 'ROLE_ADMIN'));
+
+    console.log('DEBUG: isAdmin Result:', hasRole);
+    return hasRole;
   }
 
   getUser(): any {

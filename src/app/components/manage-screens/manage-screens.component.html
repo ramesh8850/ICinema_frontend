@@ -1,0 +1,70 @@
+<div class="container mt-5">
+    <div class="card bg-dark text-white shadow-lg">
+        <div class="card-header bg-danger text-uppercase fw-bold">
+            <i class="bi bi-display me-2"></i> Add New Screen
+        </div>
+        <div class="card-body p-4">
+
+            <!-- Alerts -->
+            <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> {{ successMessage }}
+                <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+                <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+            </div>
+
+            <form [formGroup]="screenForm" (ngSubmit)="onSubmit()">
+
+                <!-- Theatre Selection -->
+                <div class="mb-3">
+                    <label class="form-label text-light small text-uppercase">Select Theatre</label>
+                    <select class="form-select bg-dark text-white border-secondary" formControlName="theatreId">
+                        <option value="" disabled>Choose a Theatre</option>
+                        <option *ngFor="let theatre of theatres" [value]="theatre.id">
+                            {{ theatre.name }}, {{ theatre.city }}
+                        </option>
+                    </select>
+                    <div *ngIf="screenForm.get('theatreId')?.touched && screenForm.get('theatreId')?.invalid"
+                        class="text-danger small mt-1">
+                        Theatre is required.
+                    </div>
+                </div>
+
+                <!-- Screen Name -->
+                <div class="mb-3">
+                    <label class="form-label text-light small text-uppercase">Screen Name</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary"
+                        formControlName="screenName" placeholder="e.g. IMAX Hall 1">
+                    <div *ngIf="screenForm.get('screenName')?.touched && screenForm.get('screenName')?.invalid"
+                        class="text-danger small mt-1">
+                        Screen name must be at least 3 characters.
+                    </div>
+                </div>
+
+                <!-- Total Seats -->
+                <div class="mb-4">
+                    <label class="form-label text-light small text-uppercase">Total Capacity</label>
+                    <input type="number" class="form-control bg-dark text-white border-secondary"
+                        formControlName="totalSeats" placeholder="e.g. 150">
+                    <div class="form-text text-muted">
+                        <i class="bi bi-info-circle"></i> Seats (Silver/Gold/Platinum) will be generated automatically.
+                    </div>
+                    <div *ngIf="screenForm.get('totalSeats')?.touched && screenForm.get('totalSeats')?.invalid"
+                        class="text-danger small mt-1">
+                        Seats must be between 10 and 500.
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-danger w-100 py-2 fw-bold"
+                    [disabled]="screenForm.invalid || loading">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                    {{ loading ? 'Creating Infrastructure...' : 'Install Screen' }}
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>

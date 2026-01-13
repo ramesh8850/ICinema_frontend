@@ -1,0 +1,87 @@
+<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center form-container">
+    <div class="card p-4 shadow-lg form-card">
+        <h2 class="text-center mb-4 neon-text">Manage Shows</h2>
+
+        <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+        <form [formGroup]="showForm" (ngSubmit)="onSubmit()">
+
+            <!-- Movie Selection -->
+            <div class="mb-3">
+                <label class="form-label text-light">Select Movie</label>
+                <select class="form-select custom-input" formControlName="movieId">
+                    <option value="" disabled>Choose a Movie</option>
+                    <option *ngFor="let movie of movies" [value]="movie.id">
+                        {{ movie.title }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Theatre Selection -->
+            <div class="mb-3">
+                <label class="form-label text-light">Select Theatre</label>
+                <select class="form-select custom-input" formControlName="theatreId">
+                    <option value="" disabled>Choose a Theatre</option>
+                    <option *ngFor="let theatre of theatres" [value]="theatre.id">
+                        {{ theatre.name }} ({{ theatre.city }})
+                    </option>
+                </select>
+            </div>
+
+            <!-- Screen Selection -->
+            <div class="mb-3">
+                <label class="form-label text-light">Select Screen</label>
+                <select class="form-select custom-input" formControlName="screenId">
+                    <option value="" disabled>Choose a Screen</option>
+                    <option *ngFor="let screen of screens" [value]="screen.id">
+                        {{ screen.screenName }} (Capacity: {{ screen.totalSeats }})
+                    </option>
+                </select>
+            </div>
+
+            <div class="row">
+                <!-- Date -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label text-light">Start Date</label>
+                    <input type="date" class="form-control custom-input" formControlName="showDate">
+                </div>
+                <!-- End Date (Optional) -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label text-light">End Date (Optional)</label>
+                    <input type="date" class="form-control custom-input" formControlName="endDate"
+                        placeholder="Leave empty for single day">
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Time -->
+                <div class="col-md-12 mb-3">
+                    <label class="form-label text-light">Show Time</label>
+                    <input type="time" class="form-control custom-input" formControlName="showTime">
+                </div>
+            </div>
+
+            <!-- Pricing Section -->
+            <h5 class="text-light mt-3 mb-3 border-bottom pb-2">Seat Pricing</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label text-light">Silver Price</label>
+                    <input type="number" class="form-control custom-input" formControlName="priceSilver">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label text-light">Gold Price</label>
+                    <input type="number" class="form-control custom-input" formControlName="priceGold">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label text-light">Platinum Price</label>
+                    <input type="number" class="form-control custom-input" formControlName="pricePlatinum">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-3 btn-neon" [disabled]="showForm.invalid">
+                Add Show
+            </button>
+        </form>
+    </div>
+</div>

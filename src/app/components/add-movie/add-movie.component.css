@@ -1,0 +1,40 @@
+.form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.form-group label {
+    color: #ffd700;
+}
+
+.form-control {
+    background: #2c2c2c;
+    border: 1px solid #444;
+    color: white;
+}
+
+.form-control:focus {
+    background: #2c2c2c;
+    border-color: #ffd700;
+    color: white;
+    box-shadow: none;
+}
+
+.btn-submit {
+    background: linear-gradient(45deg, #ffd700, #ffaa00);
+    color: black;
+    font-weight: bold;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.btn-submit:hover {
+    transform: scale(1.02);
+}

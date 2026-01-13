@@ -9,9 +9,20 @@ import { BookingComponent } from './components/booking/booking.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { TicketComponent } from './components/ticket/ticket.component';
 import { ScreenMatrixComponent } from './components/screen-matrix/screen-matrix.component';
+import { AddMovieComponent } from './components/add-movie/add-movie.component';
+import { AdminGuard } from './guards/admin.guard';
+
+import { ManageShowsComponent } from './components/manage-shows/manage-shows.component';
+import { ManageScreensComponent } from './components/manage-screens/manage-screens.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'admin', component: AdminDashboardComponent, canActivate: [AdminGuard] },
+  { path: 'admin/add-movie', component: AddMovieComponent, canActivate: [AdminGuard] },
+  { path: 'admin/manage-shows', component: ManageShowsComponent, canActivate: [AdminGuard] },
+  { path: 'admin/manage-screens', component: ManageScreensComponent, canActivate: [AdminGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },

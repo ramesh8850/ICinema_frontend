@@ -10,34 +10,85 @@
     <!-- Filters Section -->
     <div class="filters-container mb-5 shadow-lg fade-in">
         <div class="row align-items-end g-3">
+            <!-- Genre Filter -->
             <div class="col-md-3">
                 <label class="form-label text-white-50 small text-uppercase">Genre</label>
-                <select class="form-select custom-select" [(ngModel)]="filterGenre" (change)="applyFilter()">
-                    <option value="">All Genres</option>
-                    <option *ngFor="let g of genres" [value]="g.name">{{ g.name }} <span class="text-muted">({{ g.count
-                            }})</span></option>
-                </select>
+                <div class="dropdown" [class.show]="genreDropdownOpen">
+                    <button class="btn filter-btn w-100 dropdown-toggle" type="button" (click)="toggleGenreDropdown()">
+                        {{ selectedGenres.size > 0 ? selectedGenres.size + ' Selected' : 'All Genres' }}
+                    </button>
+                    <ul class="dropdown-menu" [class.show]="genreDropdownOpen" (click)="$event.stopPropagation()">
+                        <li *ngFor="let g of genres">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [checked]="isGenreSelected(g.name)"
+                                    (change)="toggleGenre(g.name)" id="genre-{{g.name}}">
+                                <label class="form-check-label" for="genre-{{g.name}}">
+                                    {{ g.name }} <span class="text-muted">({{ g.count }})</span>
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
+
+            <!-- Language Filter -->
+            <!-- Language Filter -->
             <div class="col-md-3">
                 <label class="form-label text-white-50 small text-uppercase">Language</label>
-                <select class="form-select custom-select" [(ngModel)]="filterLanguage" (change)="applyFilter()">
-                    <option value="">All Languages</option>
-                    <option *ngFor="let l of languages" [value]="l.name">{{ l.name }} ({{ l.count }})</option>
-                </select>
+                <div class="dropdown" [class.show]="langDropdownOpen">
+                    <button class="btn filter-btn w-100 dropdown-toggle" type="button" (click)="toggleLangDropdown()">
+                        {{ selectedLanguages.size > 0 ? selectedLanguages.size + ' Selected' : 'All Languages' }}
+                    </button>
+                    <ul class="dropdown-menu" [class.show]="langDropdownOpen" (click)="$event.stopPropagation()">
+                        <li *ngFor="let l of languages">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [checked]="isLanguageSelected(l.name)"
+                                    (change)="toggleLanguage(l.name)" id="lang-{{l.name}}">
+                                <label class="form-check-label" for="lang-{{l.name}}">
+                                    {{ l.name }} <span class="text-muted">({{ l.count }})</span>
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="col-md-3">
-                <label class="form-label text-white-50 small text-uppercase">Minimum Rating</label>
+
+            <!-- Censor Rating Filter (New) -->
+            <div class="col-md-2">
+                <label class="form-label text-white-50 small text-uppercase">Censor Rating</label>
+                <div class="dropdown" [class.show]="censorDropdownOpen">
+                    <button class="btn filter-btn w-100 dropdown-toggle" type="button" (click)="toggleCensorDropdown()">
+                        {{ selectedCensorRatings.size > 0 ? selectedCensorRatings.size + ' Selected' : 'All' }}
+                    </button>
+                    <ul class="dropdown-menu" [class.show]="censorDropdownOpen" (click)="$event.stopPropagation()">
+                        <li *ngFor="let c of censorRatings">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [checked]="isCensorSelected(c)"
+                                    (change)="toggleCensorRating(c)" id="censor-{{c}}">
+                                <label class="form-check-label" for="censor-{{c}}">
+                                    {{ c }}
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Star Rating (Single Select for Minimum) -->
+            <div class="col-md-2">
+                <label class="form-label text-white-50 small text-uppercase">Min Rating</label>
                 <select class="form-select custom-select" [(ngModel)]="filterRating" (change)="applyFilter()">
-                    <option [ngValue]="null">Any Rating</option>
-                    <option [ngValue]="4">⭐⭐⭐⭐ & Up (Excellent)</option>
-                    <option [ngValue]="3">⭐⭐⭐ & Up (Good)</option>
-                    <option [ngValue]="2">⭐⭐ & Up (Average)</option>
+                    <option [ngValue]="null">Any</option>
+                    <option [ngValue]="4">4+ (Excellent)</option>
+                    <option [ngValue]="3">3+ (Good)</option>
+                    <option [ngValue]="2">2+ (Average)</option>
                 </select>
             </div>
-            <div class="col-md-3">
+
+            <div class="col-md-2">
                 <button class="btn btn-clear w-100 py-2 d-flex align-items-center justify-content-center gap-2"
-                    (click)="filterGenre='';filterLanguage='';filterRating=null;loadMovies()">
-                    <i class="bi bi-x-circle"></i> Clear Filters
+                    (click)="selectedGenres.clear();selectedLanguages.clear();selectedCensorRatings.clear();filterRating=null;applyFilter()">
+                    <i class="bi bi-x-circle"></i> Clear
                 </button>
             </div>
         </div>
@@ -59,7 +110,8 @@
         <h3 class="text-white">No Movies Found</h3>
         <p>Try adjusting your filters to find what you're looking for.</p>
         <button class="btn btn-primary mt-3 px-4 rounded-pill"
-            (click)="filterGenre='';filterLanguage='';filterRating=null;loadMovies()">View All Movies</button>
+            (click)="selectedGenres.clear();selectedLanguages.clear();selectedCensorRatings.clear();filterRating=null;applyFilter()">View
+            All Movies</button>
     </div>
 
     <!-- Movie Grid -->
@@ -72,9 +124,19 @@
                 <!-- Overlay Content -->
                 <div class="card-body d-flex flex-column justify-content-end">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge bg-primary text-white">{{ movie.genre }}</span>
-                        <div class="text-warning small fw-bold bg-dark px-2 py-1 rounded-pill bg-opacity-75">
-                            <i class="bi bi-star-fill"></i> {{ movie.averageRating || 'N/A' }}
+                        <div class="d-flex gap-1 flex-wrap">
+                            <span class="badge bg-primary text-white" *ngFor="let g of getGenresArray(movie.genre)">
+                                {{ g }}
+                            </span>
+                        </div>
+                        <div class="d-flex gap-1">
+                            <div class="text-white small fw-bold bg-secondary px-2 py-1 rounded-pill bg-opacity-75"
+                                *ngIf="movie.censorRating">
+                                {{ movie.censorRating }}
+                            </div>
+                            <div class="text-warning small fw-bold bg-dark px-2 py-1 rounded-pill bg-opacity-75">
+                                <i class="bi bi-star-fill"></i> {{ movie.averageRating || 'N/A' }}
+                            </div>
                         </div>
                     </div>
 
