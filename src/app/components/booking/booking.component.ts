@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ShowService } from '../../services/show.service';
 import { BookingService } from '../../services/booking.service';
 import { AuthService } from '../../services/auth.service';
+import { WebSocketService } from '../../services/websocket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-booking',
@@ -29,19 +31,74 @@ export class BookingComponent implements OnInit {
     private router: Router,
     private showService: ShowService,
     private bookingService: BookingService,
-    private authService: AuthService
+    private authService: AuthService,
+    private webSocketService: WebSocketService
   ) { }
 
   show: any | null = null;
+  private seatUpdateSubscription: Subscription | null = null;
 
   ngOnInit(): void {
     this.showId = Number(this.route.snapshot.paramMap.get('showId'));
     if (this.showId) {
       this.loadData();
+
+      // Real-Time Seat Updates
+      this.seatUpdateSubscription = this.webSocketService.watch(`/topic/seat-updates/${this.showId}`)
+        .subscribe((message) => {
+          const update = JSON.parse(message.body);
+          console.log('Real-Time Update:', update);
+
+          if (update.showId === this.showId) {
+            this.updateSeatStatus(update.seatId, update.status, update.bookedByUserId);
+          }
+        });
+
     } else {
       this.error = 'Invalid Show ID';
       this.loading = false;
     }
+  }
+
+  ngOnDestroy() {
+    if (this.seatUpdateSubscription) {
+      this.seatUpdateSubscription.unsubscribe();
+    }
+  }
+
+  // Helper to update local state instantly
+  updateSeatStatus(physicalSeatId: number, status: string, bookedByUserId?: number) {
+    // 1. Update in showSeats array for visual rendering
+    const seat = this.showSeats.find(s => s.seatId === physicalSeatId);
+    if (seat) {
+      seat.status = status;
+
+      // If user had selected this seat...
+      if (this.isSelected(seat)) {
+        this.toggleSeat(seat); // Deselect
+
+        // Show alert ONLY if it was booked by SOMEONE ELSE
+        const currentUser = this.authService.getUser();
+
+        // Robust extraction of current user ID
+        let currentUserId = currentUser ? currentUser.id : null;
+        if (!currentUserId && currentUser && currentUser.user && currentUser.user.id) {
+          currentUserId = currentUser.user.id;
+        }
+
+        // If I am the one who booked it, do NOT show the alert.
+        console.log(`[WebSocket] Seat Update: BookedBy=${bookedByUserId}, CurrentUser=${currentUserId}`);
+
+        // Only show alert if we have a valid BookedBy ID and it's NOT ME.
+        // This prevents alerts if backend is stale (bookedByUserId undefined) or if it's me.
+        if (bookedByUserId && bookedByUserId !== currentUserId) {
+          alert(`Seat ${seat.rowName}${seat.seatNumber} was just booked by someone else!`);
+        }
+      }
+    }
+
+    // 2. Update stats
+    this.availableCount = this.showSeats.filter(s => s.status === 'AVAILABLE').length;
   }
 
   loadData() {
@@ -79,7 +136,7 @@ export class BookingComponent implements OnInit {
 
         this.showSeats.forEach(s => {
           if (s.price > 0) {
-            const key = s.seatType || 'Standard';
+            const key = s.seatType || s.type || 'Standard';
             if (!typeStats.has(key)) {
               typeStats.set(key, { price: s.price, count: 0 });
             }
@@ -112,6 +169,8 @@ export class BookingComponent implements OnInit {
   seatSections: { type: string, price: number, rows: { name: string, seats: any[] }[] }[] = [];
 
   processSeats(seats: any[]) {
+    if (!seats || seats.length === 0) return;
+
     // 1. Group seats by Type (and Price)
     const typeMap = new Map<string, any[]>();
 
@@ -144,10 +203,10 @@ export class BookingComponent implements OnInit {
       const typeSeats = typeMap.get(type) || [];
       const price = typeSeats[0]?.price || 0;
 
-      // Group these seats by Row Name
+      // Group these seats by Row Name (checking multiple possible properties)
       const rowsMap = new Map<string, any[]>();
       typeSeats.forEach(seat => {
-        const row = seat.rowName;
+        const row = seat.rowName || seat.row || 'Row';
         if (!rowsMap.has(row)) { rowsMap.set(row, []); }
         rowsMap.get(row)?.push(seat);
       });
@@ -155,7 +214,11 @@ export class BookingComponent implements OnInit {
       // Convert to Rows Array
       const rows = Array.from(rowsMap.keys()).sort().map(key => ({
         name: key,
-        seats: (rowsMap.get(key) || []).sort((a: any, b: any) => a.seatNumber - b.seatNumber)
+        seats: (rowsMap.get(key) || []).sort((a: any, b: any) => {
+          const numA = parseInt(a.seatNumber || a.number || a.id || 0);
+          const numB = parseInt(b.seatNumber || b.number || b.id || 0);
+          return numA - numB;
+        })
       }));
 
       this.seatSections.push({

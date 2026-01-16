@@ -1,47 +1,286 @@
-/* Reusing auth container styles */
-.auth-container {
-    max-width: 500px;
-    margin: 2rem auto;
-    padding: 2.5rem;
-    background-color: var(--bg-card);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+/* --- Premium Digital Receipt Container --- */
+.receipt-container {
+    max-width: 550px;
+    margin: 4rem auto 8rem;
+    position: relative;
+    /* Simulate paper drop shadow */
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
+    animation: print-receipt 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-.auth-header {
+@keyframes print-receipt {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Glass Effect Base */
+.receipt-card {
+    background: rgba(20, 20, 25, 0.85);
+    /* Dark semi-transparent */
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px 20px 0 0;
+    /* Flat bottom for tear illusion */
+}
+
+/* Torn Paper Edge (Visual Trick) */
+.receipt-tear-edge {
+    height: 15px;
+    background: linear-gradient(135deg, transparent 10px, rgba(20, 20, 25, 0.85) 0) top left,
+        linear-gradient(225deg, transparent 10px, rgba(20, 20, 25, 0.85) 0) top right;
+    background-size: 20px 100%;
+    background-repeat: repeat-x;
+    border-top: none;
+    opacity: 0.85;
+    /* Match card opacity */
+    margin-top: -1px;
+    /* Remove gap */
+}
+
+/* Top Section: Summary */
+.receipt-header {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 2.5rem 2rem 1.5rem;
+    border-radius: 20px 20px 0 0;
     text-align: center;
-    margin-bottom: 1.5rem;
-    color: var(--text-main);
+    border-bottom: 2px dashed rgba(255, 255, 255, 0.1);
 }
 
-.text-accent {
+.total-amount {
     color: var(--accent-neon);
+    text-shadow: 0 0 20px rgba(0, 219, 190, 0.3);
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0.5rem 0;
+    letter-spacing: -1px;
 }
 
-.form-control {
-    background-color: var(--bg-void);
-    border: 1px solid #2D2D3D;
-    color: var(--text-main);
+.receipt-meta {
+    font-size: 0.9rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
 }
 
-.form-control:focus {
-    background-color: var(--bg-void);
-    border-color: var(--primary-brand);
-    color: var(--text-main);
-    box-shadow: none;
+/* Summary Grid */
+.summary-grid {
+    padding: 1.5rem 2rem;
 }
 
-.btn-primary {
-    background-color: var(--accent-neon);
+.line-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    color: #ccc;
+}
+
+.line-item.discount {
+    color: #00dbbe;
+    /* Neon Green */
+}
+
+.line-item.final {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+/* --- Payment Method Grid --- */
+.payment-section {
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    /* Slightly darker for contrast */
+}
+
+.form-label-premium {
+    color: #888;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 2rem;
+}
+
+.method-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+.method-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.method-card.active {
+    background: rgba(112, 0, 255, 0.1);
+    /* Low opacity purple */
+    border-color: #7000FF;
+    box-shadow: 0 0 20px rgba(112, 0, 255, 0.3) inset;
+}
+
+.method-card i {
+    font-size: 2rem;
+    color: #aaa;
+    margin-bottom: 0.5rem;
+    display: block;
+    transition: color 0.3s;
+}
+
+.method-card.active i {
+    color: #fff;
+    /* White icon when active */
+    filter: drop-shadow(0 0 10px #7000FF);
+}
+
+.method-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ccc;
+}
+
+.method-card.active .method-name {
+    color: #fff;
+}
+
+.discount-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #00dbbe;
     color: #000;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* --- Premium Inputs --- */
+.input-group-premium {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-control-premium {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    color: #fff;
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.form-control-premium::placeholder {
+    color: #555;
+}
+
+.form-control-premium:focus {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: #7000FF;
+    box-shadow: 0 0 15px rgba(112, 0, 255, 0.2);
+    /* Purple glow focus */
+    outline: none;
+}
+
+.form-text-premium {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+/* --- Action Buttons --- */
+.btn-pay-glow {
+    background: linear-gradient(135deg, #7000FF 0%, #a033ff 100%);
+    color: #fff;
     border: none;
     width: 100%;
-    padding: 1rem;
-    font-weight: 700;
-    font-size: 1.1rem;
+    padding: 1.2rem;
+    border-radius: 15px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 30px rgba(112, 0, 255, 0.4);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
 }
 
-.btn-primary:hover:not(:disabled) {
-    background-color: #00dbbe;
+.btn-pay-glow:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(112, 0, 255, 0.6);
+    background: linear-gradient(135deg, #8019ff 0%, #b04dff 100%);
+}
+
+.btn-pay-glow:disabled {
+    background: #333;
+    color: #000;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.btn-cancel-link {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    /* Much brighter than #666 */
+    font-size: 0.95rem;
+    margin-top: 1.5rem;
+    text-decoration: underline;
+    /* Clearly a link */
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+.btn-cancel-link:hover {
+    color: #fff;
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Mobile Responsive */
+@media (max-width: 500px) {
+    .receipt-container {
+        margin: 1rem auto 10rem;
+        width: 95%;
+    }
+
+    .receipt-header {
+        padding: 2rem 1.5rem;
+    }
+
+    .total-amount {
+        font-size: 2.8rem;
+    }
+
+    .payment-section {
+        padding: 1.5rem;
+    }
 }

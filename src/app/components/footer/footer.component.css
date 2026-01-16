@@ -1,0 +1,131 @@
+/* --- Electric Midnight Footer Theme --- */
+
+.footer-container {
+    background: #000;
+    position: relative;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+    overflow: hidden;
+}
+
+.glass-border-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.footer-brand {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, var(--primary-brand) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* --- Social Icons --- */
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.social-btn:hover {
+    background: var(--primary-brand);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(112, 0, 255, 0.4);
+    border-color: var(--primary-brand);
+}
+
+/* --- Links --- */
+.footer-heading {
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: var(--accent-neon);
+    transform: translateX(5px);
+    text-shadow: 0 0 8px rgba(0, 255, 194, 0.5);
+}
+
+/* --- Newsletter Input --- */
+.glass-input-group {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 0.25rem;
+    display: flex;
+}
+
+.glass-input-group .form-control {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding-left: 1.25rem;
+    box-shadow: none;
+}
+
+.glass-input-group .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-neon-primary {
+    background: var(--primary-brand);
+    color: #fff;
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-neon-primary:hover {
+    box-shadow: 0 0 15px rgba(112, 0, 255, 0.5);
+    transform: scale(1.05);
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .footer-container {
+        text-align: center;
+        padding-bottom: 90px;
+        /* Space for mobile bottom nav */
+    }
+
+    .social-links {
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .footer-heading {
+        margin-top: 1rem;
+    }
+}

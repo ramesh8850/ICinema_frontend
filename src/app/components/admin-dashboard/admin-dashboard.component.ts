@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
     styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent {
+    currentDate = new Date();
     // Logic for admin dashboard stats can be added here
 }

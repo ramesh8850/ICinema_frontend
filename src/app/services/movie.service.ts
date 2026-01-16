@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -24,12 +24,12 @@ export class MovieService {
   }
 
   filterMovies(genre?: string, language?: string, rating?: number): Observable<any> {
-    let params = '';
-    if (genre) params += `genre=${genre}&`;
-    if (language) params += `language=${language}&`;
-    if (rating) params += `rating=${rating}`;
-    if (rating) params += `rating=${rating}`;
-    return this.http.get(`${this.apiUrl}/filter?${params}`);
+    let params = new HttpParams();
+    if (genre) params = params.set('genre', genre);
+    if (language) params = params.set('language', language);
+    if (rating) params = params.set('rating', rating);
+
+    return this.http.get(`${this.apiUrl}/filter`, { params });
   }
 
   addMovie(movie: any): Observable<any> {

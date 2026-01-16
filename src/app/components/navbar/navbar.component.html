@@ -1,42 +1,67 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark-theme sticky-top d-desktop-only">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark-theme sticky-top px-3">
     <div class="container-fluid">
+        <!-- Brand -->
         <a class="navbar-brand brand-text" routerLink="/home">iCinema</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+        <!-- Mobile Toggler -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Left Side -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="authService.isLoggedIn()">
+
+            <!-- Center Navigation (Hidden on Mobile if needed, or collapsed) -->
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0" *ngIf="authService.isLoggedIn()">
                 <li class="nav-item">
-                    <a class="nav-link active" routerLink="/home">Movies</a>
+                    <a class="nav-link" routerLink="/home" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{exact: true}">Movies</a>
                 </li>
-                <li class="nav-item" *ngIf="authService.isLoggedIn() && authService.isAdmin()">
-                    <a class="nav-link text-warning fw-bold" routerLink="/admin">
-                        <i class="bi bi-speedometer2"></i> Admin Dashboard
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/profile" fragment="bookings">My Bookings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/profile" fragment="watchlist">Watchlist</a>
+                </li>
+                <li class="nav-item" *ngIf="authService.isAdmin()">
+                    <a class="nav-link text-warning" routerLink="/admin">
+                        <i class="bi bi-shield-lock-fill"></i> Admin
                     </a>
                 </li>
             </ul>
 
-            <!-- Search Bar -->
-            <form class="d-flex me-3" role="search" (ngSubmit)="onSearch()" *ngIf="authService.isLoggedIn()">
-                <input class="form-control me-2" type="search" placeholder="Search movies..." aria-label="Search"
-                    [(ngModel)]="searchQuery" name="search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            <!-- Right Side (Auth) -->
+            <ul class="navbar-nav ms-auto align-items-center">
 
-            <!-- Right Side (User/Auth) -->
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-                    <a class="nav-link btn-login" routerLink="/login">Login</a>
-                </li>
-                <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-                    <a class="nav-link btn-register" routerLink="/register">Register</a>
-                </li>
-                <li class="nav-item" *ngIf="authService.isLoggedIn()">
-                    <a class="nav-link disabled text-light">Welcome, {{ authService.getUser()?.username }}</a>
-                </li>
-                <li class="nav-item" *ngIf="authService.isLoggedIn()">
-                    <a class="nav-link btn-logout" (click)="logout()">Logout</a>
+                <!-- Guest State -->
+                <ng-container *ngIf="!authService.isLoggedIn()">
+                    <li class="nav-item">
+                        <a class="nav-link btn-login" routerLink="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-register" routerLink="/register">Register</a>
+                    </li>
+                </ng-container>
+
+                <!-- Logged In State (Dropdown) -->
+                <li class="nav-item dropdown" *ngIf="authService.isLoggedIn()">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        data-bs-toggle="dropdown">
+                        <div class="avatar-circle">
+                            {{ authService.getUser()?.username?.charAt(0) | uppercase }}
+                        </div>
+                        <span class="d-none d-lg-inline">{{ authService.getUser()?.username }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end bg-dark border-secondary shadow-lg">
+                        <li><a class="dropdown-item text-white" routerLink="/profile"><i
+                                    class="bi bi-person-circle me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item text-white" routerLink="/profile" fragment="settings"><i
+                                    class="bi bi-gear me-2"></i> Settings</a></li>
+                        <li>
+                            <hr class="dropdown-divider bg-secondary">
+                        </li>
+                        <li><a class="dropdown-item text-danger" (click)="logout()"><i
+                                    class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                    </ul>
                 </li>
             </ul>
         </div>

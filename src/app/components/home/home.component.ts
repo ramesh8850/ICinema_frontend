@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { WatchlistService } from '../../services/watchlist.service';
 
 @Component({
   selector: 'app-home',
@@ -35,7 +37,14 @@ export class HomeComponent implements OnInit {
   // Keep a full copy for client-side filtering if needed, checking existing code logic
   allMovies: any[] = [];
 
-  constructor(private movieService: MovieService, private route: ActivatedRoute) { }
+  watchlistSet: Set<number> = new Set(); // Efficient lookup O(1)
+
+  constructor(
+    private movieService: MovieService,
+    private route: ActivatedRoute,
+    public authService: AuthService,
+    private watchlistService: WatchlistService
+  ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -55,6 +64,7 @@ export class HomeComponent implements OnInit {
         this.movies = response.data || response;
         this.allMovies = [...this.movies];
         this.calculateFilterCounts();
+        this.loadWatchlist(); // Fetch user's wishlist
         this.loading = false;
       },
       error: (err) => {
@@ -158,8 +168,8 @@ export class HomeComponent implements OnInit {
 
   applyFilter() {
     this.loading = true;
-    const genreParam = Array.from(this.selectedGenres).join('|');
-    const langParam = Array.from(this.selectedLanguages).join('|');
+    const genreParam = Array.from(this.selectedGenres).join(',');
+    const langParam = Array.from(this.selectedLanguages).join(',');
 
     // Note: Censor Rating is not yet sent to backend. I will add client-side filtering 
     // after fetching results to handle mixed mode, OR ignores it for now.
@@ -181,6 +191,52 @@ export class HomeComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.loading = false;
+      }
+    });
+  }
+
+  // Optimized Watchlist Logic
+  loadWatchlist() {
+    if (!this.authService.isLoggedIn()) return;
+
+    this.watchlistService.getMyWatchlist().subscribe({
+      next: (data) => {
+        // Create a Set of IDs for O(1) lookup
+        this.watchlistSet = new Set(data.map((m: any) => m.id));
+      },
+      error: (err) => console.error('Failed to load watchlist', err)
+    });
+  }
+
+  isInWatchlist(movieId: number): boolean {
+    return this.watchlistSet.has(movieId);
+  }
+
+  toggleWatchlist(event: Event, movie: any) {
+    event.stopPropagation(); // Prevent navigation to details page
+    event.preventDefault();
+
+    if (!this.authService.isLoggedIn()) {
+      alert('Please login to use watchlist');
+      return;
+    }
+
+    // Optimistic UI Update
+    if (this.watchlistSet.has(movie.id)) {
+      this.watchlistSet.delete(movie.id);
+    } else {
+      this.watchlistSet.add(movie.id);
+    }
+
+    this.watchlistService.toggleWatchlist(movie.id).subscribe({
+      error: (err) => {
+        // Revert on error
+        if (this.watchlistSet.has(movie.id)) {
+          this.watchlistSet.delete(movie.id);
+        } else {
+          this.watchlistSet.add(movie.id);
+        }
+        console.error('Failed to toggle watchlist', err);
       }
     });
   }

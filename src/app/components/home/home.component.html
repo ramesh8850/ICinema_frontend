@@ -1,152 +1,145 @@
-<div class="container-fluid px-4 px-lg-5 mt-4">
-    <!-- Hero/Banner Section -->
-    <div class="hero-section mb-5 p-5 rounded-4 text-center">
-        <div class="hero-content fade-in">
-            <h1 class="display-3 fw-bold text-white mb-2">Cinema Reimagined</h1>
-            <p class="text-white-50 lead fs-4">Explore the latest blockbusters in premium comfort.</p>
+<!-- Electric Midnight Home -->
+<div class="container-fluid p-0">
+
+    <!-- Cinematic Hero -->
+    <div class="hero-section fade-in">
+        <h1 class="hero-title">Experience<br>Cinema</h1>
+        <p class="text-white-50 fs-5">Premium bookings for the modern era.</p>
+    </div>
+
+    <!-- Floating Filter Island (Mobile Optimized) -->
+    <div class="filter-island-container">
+
+        <!-- 1. Search Bar (Full Width) -->
+        <div class="glass-panel search-bar-container">
+            <div class="search-input-wrapper">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" placeholder="Search for movies, actors..." class="search-input" #searchInput
+                    (keyup)="searchMovies(searchInput.value)">
+            </div>
+        </div>
+
+        <!-- 2. Filter Toggle Bar (Opens Side Menu) -->
+        <div class="filter-trigger-bar" data-bs-toggle="offcanvas" data-bs-target="#mobileFilters">
+            <div class="filter-label">
+                <i class="bi bi-sliders2"></i> Filter Movies
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary rounded-pill" *ngIf="selectedGenres.size + selectedLanguages.size > 0">
+                    {{ selectedGenres.size + selectedLanguages.size }}
+                </span>
+                <i class="bi bi-chevron-right text-muted"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <!-- Immersive Grid -->
+    <div class="movie-grid pb-5" *ngIf="!loading">
+        <div class="fade-in-up" *ngFor="let movie of movies; let i = index" [style.animation-delay]="i * 0.02 + 's'">
+
+            <!-- The Card -->
+            <div class="cinematic-card" [routerLink]="['/movie', movie.id]">
+                <img [src]="movie.imageUrl" class="poster-img" loading="lazy" alt="{{ movie.title }}">
+
+                <!-- Overlays -->
+                <div class="card-overlay-gradient"></div>
+
+                <!-- Rating Badge -->
+                <div class="rating-badge">
+                    <i class="bi bi-star-fill me-1"></i> {{ movie.averageRating || 'N/A' }}
+                </div>
+
+                <!-- Watchlist Fab -->
+                <button class="watchlist-btn" [class.active]="isInWatchlist(movie.id)"
+                    (click)="toggleWatchlist($event, movie)">
+                    <i class="bi" [class.bi-heart-fill]="isInWatchlist(movie.id)"
+                        [class.bi-heart]="!isInWatchlist(movie.id)"></i>
+                </button>
+
+                <!-- Content -->
+                <div class="card-content">
+                    <h5 class="movie-title text-truncate">{{ movie.title }}</h5>
+                    <div class="movie-meta">
+                        <!-- Show ONLY first Language & Genre to keep layout clean -->
+                        <span>{{ movie.language?.split(',')[0] }}</span>
+                        <span>•</span>
+                        <span class="text-truncate" style="max-width: 80px;">{{ movie.genre?.split(',')[0] }}</span>
+                        <span class="ms-auto border border-secondary px-1 rounded small">{{ movie.censorRating }}</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- Filters Section -->
-    <div class="filters-container mb-5 shadow-lg fade-in">
-        <div class="row align-items-end g-3">
-            <!-- Genre Filter -->
-            <div class="col-md-3">
-                <label class="form-label text-white-50 small text-uppercase">Genre</label>
-                <div class="dropdown" [class.show]="genreDropdownOpen">
-                    <button class="btn filter-btn w-100 dropdown-toggle" type="button" (click)="toggleGenreDropdown()">
-                        {{ selectedGenres.size > 0 ? selectedGenres.size + ' Selected' : 'All Genres' }}
-                    </button>
-                    <ul class="dropdown-menu" [class.show]="genreDropdownOpen" (click)="$event.stopPropagation()">
-                        <li *ngFor="let g of genres">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [checked]="isGenreSelected(g.name)"
-                                    (change)="toggleGenre(g.name)" id="genre-{{g.name}}">
-                                <label class="form-check-label" for="genre-{{g.name}}">
-                                    {{ g.name }} <span class="text-muted">({{ g.count }})</span>
-                                </label>
-                            </div>
-                        </li>
-                    </ul>
+    <!-- Empty State -->
+    <div *ngIf="!loading && movies.length === 0" class="text-center py-5 text-muted">
+        <h3>No movies found</h3>
+        <button class="btn btn-outline-light mt-3 rounded-pill px-4"
+            (click)="selectedGenres.clear();selectedLanguages.clear();applyFilter()">Clear Filters</button>
+    </div>
+
+    <!-- Mobile Offcanvas Filters (Right Side Bar) -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileFilters">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title text-white">Refine Selection</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+
+            <!-- Genres -->
+            <div class="mb-4">
+                <label class="text-white-50 small fw-bold text-uppercase mb-3 d-block">Genres</label>
+                <div class="d-flex flex-wrap gap-2">
+                    <span *ngFor="let g of genres" class="sidebar-badge" [class.selected]="isGenreSelected(g.name)"
+                        (click)="toggleGenre(g.name)">
+                        {{ g.name }}
+                    </span>
                 </div>
             </div>
 
-            <!-- Language Filter -->
-            <!-- Language Filter -->
-            <div class="col-md-3">
-                <label class="form-label text-white-50 small text-uppercase">Language</label>
-                <div class="dropdown" [class.show]="langDropdownOpen">
-                    <button class="btn filter-btn w-100 dropdown-toggle" type="button" (click)="toggleLangDropdown()">
-                        {{ selectedLanguages.size > 0 ? selectedLanguages.size + ' Selected' : 'All Languages' }}
-                    </button>
-                    <ul class="dropdown-menu" [class.show]="langDropdownOpen" (click)="$event.stopPropagation()">
-                        <li *ngFor="let l of languages">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [checked]="isLanguageSelected(l.name)"
-                                    (change)="toggleLanguage(l.name)" id="lang-{{l.name}}">
-                                <label class="form-check-label" for="lang-{{l.name}}">
-                                    {{ l.name }} <span class="text-muted">({{ l.count }})</span>
-                                </label>
-                            </div>
-                        </li>
-                    </ul>
+            <!-- Languages -->
+            <div class="mb-4">
+                <label class="text-white-50 small fw-bold text-uppercase mb-3 d-block">Languages</label>
+                <div class="d-flex flex-wrap gap-2">
+                    <span *ngFor="let l of languages" class="sidebar-badge"
+                        [class.selected]="isLanguageSelected(l.name)" (click)="toggleLanguage(l.name)">
+                        {{ l.name }}
+                    </span>
                 </div>
             </div>
 
-            <!-- Censor Rating Filter (New) -->
-            <div class="col-md-2">
-                <label class="form-label text-white-50 small text-uppercase">Censor Rating</label>
-                <div class="dropdown" [class.show]="censorDropdownOpen">
-                    <button class="btn filter-btn w-100 dropdown-toggle" type="button" (click)="toggleCensorDropdown()">
-                        {{ selectedCensorRatings.size > 0 ? selectedCensorRatings.size + ' Selected' : 'All' }}
-                    </button>
-                    <ul class="dropdown-menu" [class.show]="censorDropdownOpen" (click)="$event.stopPropagation()">
-                        <li *ngFor="let c of censorRatings">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [checked]="isCensorSelected(c)"
-                                    (change)="toggleCensorRating(c)" id="censor-{{c}}">
-                                <label class="form-check-label" for="censor-{{c}}">
-                                    {{ c }}
-                                </label>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Star Rating (Single Select for Minimum) -->
-            <div class="col-md-2">
-                <label class="form-label text-white-50 small text-uppercase">Min Rating</label>
-                <select class="form-select custom-select" [(ngModel)]="filterRating" (change)="applyFilter()">
-                    <option [ngValue]="null">Any</option>
-                    <option [ngValue]="4">4+ (Excellent)</option>
-                    <option [ngValue]="3">3+ (Good)</option>
-                    <option [ngValue]="2">2+ (Average)</option>
+            <!-- Rating -->
+            <div class="mb-4">
+                <label class="text-white-50 small fw-bold text-uppercase mb-3 d-block">Min Rating</label>
+                <select class="form-select bg-dark text-white border-secondary rounded-3 py-2"
+                    [(ngModel)]="filterRating">
+                    <option [ngValue]="null">Any Rating</option>
+                    <option [ngValue]="4">⭐⭐⭐⭐ 4+ Excellent</option>
+                    <option [ngValue]="3">⭐⭐⭐ 3+ Good</option>
+                    <option [ngValue]="2">⭐⭐ 2+ Average</option>
                 </select>
             </div>
 
-            <div class="col-md-2">
-                <button class="btn btn-clear w-100 py-2 d-flex align-items-center justify-content-center gap-2"
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 mt-5">
+                <button class="btn btn-primary rounded-pill py-3 fw-bold shadow-lg" data-bs-dismiss="offcanvas"
+                    (click)="applyFilter()">
+                    Apply Filters
+                </button>
+                <button class="btn btn-outline-secondary rounded-pill py-2"
                     (click)="selectedGenres.clear();selectedLanguages.clear();selectedCensorRatings.clear();filterRating=null;applyFilter()">
-                    <i class="bi bi-x-circle"></i> Clear
+                    Clear All
                 </button>
             </div>
+
         </div>
     </div>
 
-    <!-- Error/Loading State -->
-    <div *ngIf="loading" class="text-center text-white py-5">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-3 text-muted">Loading Movies...</p>
-    </div>
-
-    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-
-    <!-- No Movies Found State -->
-    <div *ngIf="!loading && movies.length === 0 && !error" class="text-center text-secondary py-5 glass-card">
-        <i class="bi bi-camera-reels display-1 mb-3 text-white-50"></i>
-        <h3 class="text-white">No Movies Found</h3>
-        <p>Try adjusting your filters to find what you're looking for.</p>
-        <button class="btn btn-primary mt-3 px-4 rounded-pill"
-            (click)="selectedGenres.clear();selectedLanguages.clear();selectedCensorRatings.clear();filterRating=null;applyFilter()">View
-            All Movies</button>
-    </div>
-
-    <!-- Movie Grid -->
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3 g-md-4 mb-5" *ngIf="!loading">
-        <div class="col fade-in-up" *ngFor="let movie of movies; let i = index"
-            [style.animation-delay]="i * 0.05 + 's'">
-            <div class="card movie-card h-100 border-0" [routerLink]="['/movie', movie.id]">
-                <img [src]="movie.imageUrl" class="card-img-top movie-poster" alt="{{ movie.title }}" loading="lazy">
-
-                <!-- Overlay Content -->
-                <div class="card-body d-flex flex-column justify-content-end">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div class="d-flex gap-1 flex-wrap">
-                            <span class="badge bg-primary text-white" *ngFor="let g of getGenresArray(movie.genre)">
-                                {{ g }}
-                            </span>
-                        </div>
-                        <div class="d-flex gap-1">
-                            <div class="text-white small fw-bold bg-secondary px-2 py-1 rounded-pill bg-opacity-75"
-                                *ngIf="movie.censorRating">
-                                {{ movie.censorRating }}
-                            </div>
-                            <div class="text-warning small fw-bold bg-dark px-2 py-1 rounded-pill bg-opacity-75">
-                                <i class="bi bi-star-fill"></i> {{ movie.averageRating || 'N/A' }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <h5 class="card-title text-white text-truncate">{{ movie.title }}</h5>
-                    <p class="card-text text-white-50 small mb-2"><i class="bi bi-translate me-1"></i> {{ movie.language
-                        }}</p>
-
-                    <button class="btn btn-action w-100 py-2">Book Now <i class="bi bi-ticket-fill ms-1"></i></button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

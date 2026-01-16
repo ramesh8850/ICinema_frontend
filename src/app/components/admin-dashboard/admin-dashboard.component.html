@@ -1,42 +1,101 @@
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-white neon-text text-uppercase">Admin Dashboard</h2>
-        <span class="badge bg-danger rounded-pill px-3 py-2">Admin Access</span>
+<div class="admin-dashboard container-fluid px-4 py-3">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4 dashboard-header">
+        <div>
+            <div class="text-uppercase text-white-50 small tracking-widest">Command Center</div>
+            <h2 class="text-white neon-text mb-0">Welcome, Commander</h2>
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="badg bg-dark border border-danger text-danger me-2 shadow-sm pulse-badge">
+                <i class="bi bi-shield-lock-fill me-1"></i> ADMIN ACCESS
+            </span>
+            <span class="text-white-50 small font-monospace">{{ currentDate | date:'HH:mm' }}</span>
+        </div>
     </div>
 
-    <div class="row g-4">
+    <!-- Stats Row (Placeholder for future data) -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-card glass-panel">
+                <div class="stat-icon text-neon-green"><i class="bi bi-activity"></i></div>
+                <div class="stat-value text-neon-green">Active</div>
+                <div class="stat-label">System Status</div>
+                <div class="stat-chart">
+                    <!-- Simple CSS Bar or SVG Line -->
+                    <div class="bar-loader"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card glass-panel">
+                <div class="stat-icon text-neon-cyan"><i class="bi bi-people"></i></div>
+                <div class="stat-value text-white">42</div>
+                <div class="stat-label">Users Online</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card glass-panel">
+                <div class="stat-icon text-neon-gold"><i class="bi bi-ticket-perforated"></i></div>
+                <div class="stat-value text-white">128</div>
+                <div class="stat-label">Tickets Sold</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card glass-panel">
+                <div class="stat-icon text-neon-red"><i class="bi bi-film"></i></div>
+                <div class="stat-value text-white">12</div>
+                <div class="stat-label">Now Showing</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Grid -->
+    <h5 class="text-white-50 text-uppercase small mb-3 tracking-widest">Quick Actions</h5>
+    <div class="row g-3">
         <!-- Add Movie -->
-        <div class="col-md-4">
-            <div class="card bg-dark text-white h-100 shadow-lg border-secondary category-card"
-                routerLink="/admin/add-movie">
-                <div class="card-body text-center p-5">
-                    <i class="bi bi-film display-4 text-warning mb-3"></i>
-                    <h5 class="card-title text-uppercase">Add Movie</h5>
-                    <p class="card-text text-secondary small">Upload new movies to the catalog.</p>
+        <div class="col-12 col-md-4">
+            <div class="action-tile glass-panel h-100" routerLink="/admin/add-movie">
+                <div class="tile-icon-wrapper bg-warning-subtle">
+                    <i class="bi bi-film text-neon-gold display-5"></i>
+                </div>
+                <div class="tile-content">
+                    <h5 class="text-white mb-1">Add Movie</h5>
+                    <p class="text-white-50 small mb-0">Upload metadata for new releases.</p>
+                </div>
+                <div class="tile-arrow">
+                    <i class="bi bi-arrow-right text-neon-gold"></i>
                 </div>
             </div>
         </div>
 
         <!-- Manage Shows -->
-        <div class="col-md-4">
-            <div class="card bg-dark text-white h-100 shadow-lg border-secondary category-card"
-                routerLink="/admin/manage-shows">
-                <div class="card-body text-center p-5">
-                    <i class="bi bi-calendar-event display-4 text-info mb-3"></i>
-                    <h5 class="card-title text-uppercase">Manage Shows</h5>
-                    <p class="card-text text-secondary small">Schedule movies in screens.</p>
+        <div class="col-12 col-md-4">
+            <div class="action-tile glass-panel h-100" routerLink="/admin/manage-shows">
+                <div class="tile-icon-wrapper bg-info-subtle">
+                    <i class="bi bi-calendar-range text-neon-cyan display-5"></i>
+                </div>
+                <div class="tile-content">
+                    <h5 class="text-white mb-1">Manage Shows</h5>
+                    <p class="text-white-50 small mb-0">Schedule screenings and pricing.</p>
+                </div>
+                <div class="tile-arrow">
+                    <i class="bi bi-arrow-right text-neon-cyan"></i>
                 </div>
             </div>
         </div>
 
         <!-- Add Screen -->
-        <div class="col-md-4">
-            <div class="card bg-dark text-white h-100 shadow-lg border-secondary category-card"
-                routerLink="/admin/manage-screens">
-                <div class="card-body text-center p-5">
-                    <i class="bi bi-display display-4 text-success mb-3"></i>
-                    <h5 class="card-title text-uppercase">Add Screen</h5>
-                    <p class="card-text text-secondary small">Build new infrastructure.</p>
+        <div class="col-12 col-md-4">
+            <div class="action-tile glass-panel h-100" routerLink="/admin/manage-screens">
+                <div class="tile-icon-wrapper bg-success-subtle">
+                    <i class="bi bi-display text-neon-green display-5"></i>
+                </div>
+                <div class="tile-content">
+                    <h5 class="text-white mb-1">Add Screen</h5>
+                    <p class="text-white-50 small mb-0">Expand theatre infrastructure.</p>
+                </div>
+                <div class="tile-arrow">
+                    <i class="bi bi-arrow-right text-neon-green"></i>
                 </div>
             </div>
         </div>

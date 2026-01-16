@@ -1,15 +1,244 @@
-.category-card {
-    transition: transform 0.3s ease, border-color 0.3s ease;
+/* --- Admin Dashboard Theme: Cyberpunk Command Center --- */
+
+.admin-dashboard {
+    min-height: 80vh;
+    padding-bottom: 150px !important;
+    /* Force space for mobile bottom nav */
+}
+
+/* Header Animations */
+.dashboard-header {
+    animation: slideInDown 0.6s ease-out;
+}
+
+.tracking-widest {
+    letter-spacing: 0.2em;
+}
+
+.pulse-badge {
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(220, 53, 69, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+/* --- Glass Panels --- */
+.glass-panel {
+    background: rgba(20, 20, 25, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.glass-panel:hover {
+    background: rgba(30, 30, 35, 0.8);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Stat Cards --- */
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.neon-green {
+    color: #00ff9d;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+}
+
+/* Fake Chart Loader */
+.bar-loader {
+    width: 60%;
+    height: 4px;
+    background: #00ff9d;
+    border-radius: 2px;
+    margin-top: auto;
+    box-shadow: 0 0 8px rgba(0, 255, 157, 0.6);
+    animation: bar-load 2s infinite ease-in-out;
+}
+
+@keyframes bar-load {
+
+    0%,
+    100% {
+        width: 30%;
+        opacity: 0.5;
+    }
+
+    50% {
+        width: 80%;
+        opacity: 1;
+    }
+}
+
+/* --- Action Tiles --- */
+.action-tile {
+    display: flex;
+    align-items: center;
+    position: relative;
     cursor: pointer;
+    overflow: hidden;
+    height: 100px !important;
+    /* Fixed height for consistency */
 }
 
-.category-card:hover {
-    transform: translateY(-5px);
-    border-color: #dc3545 !important;
-    /* Bootstrap danger color */
-    box-shadow: 0 10px 20px rgba(220, 53, 69, 0.2) !important;
+.action-tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    transition: background 0.3s ease;
 }
 
-.neon-text {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+.action-tile:hover::before {
+    background: currentColor;
+    /* Inherits from icon text color context via JS or sibling hover? Better to use specific classes */
+}
+
+/* Specific Borders for Hover */
+.bg-warning-subtle:parent:hover {
+    border-left: 4px solid #ffc107;
+}
+
+/* CSS parent selector doesn't exist, using generic approach below */
+
+.action-tile:hover {
+    border-left: 4px solid rgba(255, 255, 255, 0.5);
+    /* Default fallback */
+}
+
+.tile-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    /* Default darker */
+    transition: all 0.3s ease;
+}
+
+.action-tile:hover .tile-icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.bg-warning-subtle {
+    background: rgba(255, 193, 7, 0.1) !important;
+}
+
+.bg-info-subtle {
+    background: rgba(13, 202, 240, 0.1) !important;
+}
+
+.bg-success-subtle {
+    background: rgba(25, 135, 84, 0.1) !important;
+}
+
+.tile-content {
+    flex-grow: 1;
+}
+
+.tile-arrow {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.action-tile:hover .tile-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .stat-card {
+        height: 110px;
+        padding: 1rem;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+
+    .action-tile {
+        height: auto !important;
+        padding: 1.5rem;
+    }
+}
+
+/* --- Custom Neon Icons --- */
+.text-neon-gold {
+    color: #ffd700 !important;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3) !important;
+}
+
+.text-neon-cyan {
+    color: #0dcaf0 !important;
+    text-shadow: 0 0 10px rgba(13, 202, 240, 0.5), 0 0 20px rgba(13, 202, 240, 0.3) !important;
+}
+
+.text-neon-magenta {
+    color: #d63384 !important;
+    text-shadow: 0 0 10px rgba(214, 51, 132, 0.5), 0 0 20px rgba(214, 51, 132, 0.3) !important;
+}
+
+.text-neon-red {
+    color: #ff3d57 !important;
+    text-shadow: 0 0 10px rgba(255, 61, 87, 0.5), 0 0 20px rgba(255, 61, 87, 0.3) !important;
+}
+
+.text-neon-green {
+    color: #00ff9d !important;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.5), 0 0 20px rgba(0, 255, 157, 0.3) !important;
 }

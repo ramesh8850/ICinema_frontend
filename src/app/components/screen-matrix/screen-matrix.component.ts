@@ -12,6 +12,9 @@ export class ScreenMatrixComponent implements OnInit {
   movie: any | null = null;
   shows: any[] = [];
   groupedShows: { [key: string]: any[] } = {};
+  filteredGroupedShows: { [key: string]: any[] } = {}; // Holds filtered results
+  filteredRowCount: number = 0;
+  searchTerm: string = '';
   loading: boolean = true;
   error: string = '';
 
@@ -49,6 +52,7 @@ export class ScreenMatrixComponent implements OnInit {
       next: (res: any) => {
         this.shows = res.data;
         this.groupShowsByTheatre();
+        this.applyFilter(); // Initial filter needed
         this.loading = false;
       },
       error: (err) => {
@@ -70,5 +74,44 @@ export class ScreenMatrixComponent implements OnInit {
       acc[key].push(show);
       return acc;
     }, {});
+
+    // Initialize filtered list with everything
+    this.filteredGroupedShows = { ...this.groupedShows };
+  }
+
+  // New Search Filter Method
+  applyFilter() {
+    if (!this.searchTerm.trim()) {
+      this.filteredGroupedShows = { ...this.groupedShows };
+      return;
+    }
+
+    const term = this.searchTerm.toLowerCase();
+    const result: { [key: string]: any[] } = {};
+
+    for (const theatreName in this.groupedShows) {
+      const shows = this.groupedShows[theatreName];
+
+      // Check Theatre Name matches
+      const theatreMatches = theatreName.toLowerCase().includes(term);
+
+      // Check if any Show/Screen/Time matches
+      const matchingShows = shows.filter(show =>
+        show.screenName?.toLowerCase().includes(term) ||
+        show.showTime?.toLowerCase().includes(term)
+      );
+
+      // Include if header matches OR any children match
+      if (theatreMatches) {
+        // If theatre matches, show all shows (or you could strictly filter shows too)
+        result[theatreName] = shows;
+      } else if (matchingShows.length > 0) {
+        // If theatre doesn't match, but filtering down to specific screens/times
+        result[theatreName] = matchingShows;
+      }
+    }
+
+    this.filteredGroupedShows = result;
+    this.filteredRowCount = Object.keys(result).length;
   }
 }

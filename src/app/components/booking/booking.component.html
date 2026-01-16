@@ -45,17 +45,12 @@
                 <div class="glass-card p-4">
                     <h5 class="text-center mb-4 text-white-50 text-uppercase ls-1">How many seats?</h5>
 
-                    <!-- Custom Stepper -->
-                    <div class="d-flex align-items-center justify-content-center gap-3 mb-5">
-                        <button class="stepper-btn" (click)="seatQuantity = seatQuantity - 1"
-                            [disabled]="seatQuantity <= 1">
-                            <i class="bi bi-dash"></i>
-                        </button>
-                        <input type="number" class="stepper-input" [(ngModel)]="seatQuantity" min="1" max="10">
-                        <button class="stepper-btn" (click)="seatQuantity = seatQuantity + 1"
-                            [disabled]="seatQuantity >= 10">
-                            <i class="bi bi-plus"></i>
-                        </button>
+                    <!-- STAGE 1: Premium Quantity Selector -->
+                    <div class="quantity-grid d-flex flex-wrap justify-content-center gap-3 mb-5">
+                        <div *ngFor="let num of [1,2,3,4,5,6,7,8,9,10]" class="qty-item"
+                            [class.active]="seatQuantity === num" (click)="seatQuantity = num">
+                            {{ num }}
+                        </div>
                     </div>
 
                     <!-- Price Tiers Display -->
@@ -92,67 +87,92 @@
                 </button>
             </div>
 
-            <!-- Screen Visual -->
-            <div class="screen-visual mb-5">SCREEN</div>
-
-            <!-- Seats Grid -->
-            <div class="seats-grid">
-
-                <div *ngFor="let section of seatSections" class="mb-4">
-                    <!-- Section Header -->
-                    <div class="text-center text-muted text-uppercase fw-bold ls-1 mb-2" style="font-size: 0.8rem;">
-                        {{ section.type }} - ₹{{ section.price }}
+            <!-- Simple Static Seat Matrix -->
+            <div class="booking-matrix-wrapper mb-5">
+                <div class="seats-matrix d-flex flex-column align-items-center">
+                    <!-- Big Cinema Screen (Top Centre) -->
+                    <div class="cinema-screen-container mb-4">
+                        <div class="cinema-screen"></div>
+                        <div class="screen-text">SCREEN THIS WAY</div>
                     </div>
-                    <div class="border-top border-secondary w-50 mx-auto mb-3 opacity-25"></div>
+                    <div *ngIf="seatSections.length === 0" class="text-white-50 my-5 text-center">
+                        <i class="bi bi-search fs-1 d-block mb-3"></i>
+                        <p>Finding your perfect seats...</p>
+                        <small>No layout data found for this show.</small>
+                    </div>
 
-                    <!-- Rows in this Section -->
-                    <div *ngFor="let row of section.rows" class="d-flex justify-content-center align-items-center mb-2">
-                        <div class="row-label text-muted me-3 fw-bold" style="width: 20px;">{{ row.name }}</div>
-                        <div class="d-flex gap-2">
-                            <div *ngFor="let seat of row.seats" class="seat-box" [ngClass]="{
-                                    'booked': seat.status === 'BOOKED',
-                                    'selected': isSelected(seat),
-                                    'available': seat.status === 'AVAILABLE' && !isSelected(seat)
-                                 }" (click)="toggleSeat(seat)" title="{{seat.seatType}} - ₹{{seat.price}}">
-                                <span class="seat-number">{{ seat.seatNumber }}</span>
+                    <div *ngFor="let section of seatSections" class="mb-5 w-100 text-center">
+                        <div class="section-badge mb-4">
+                            <i class="bi bi-tag-fill me-1"></i> ₹{{ section.price }} | {{ section.type }}
+                        </div>
+
+                        <div *ngFor="let row of section.rows"
+                            class="d-flex justify-content-center align-items-center mb-3">
+                            <div class="row-id text-white-50 me-3 fw-bold">{{ row.name }}</div>
+                            <div class="d-flex gap-2">
+                                <div *ngFor="let seat of row.seats" class="seat-box" [ngClass]="{
+                                        'booked': seat.status === 'BOOKED',
+                                        'blocked': seat.status === 'BLOCKED',
+                                        'selected': isSelected(seat),
+                                        'available': seat.status === 'AVAILABLE' && !isSelected(seat)
+                                    }" (click)="toggleSeat(seat)">
+                                    <div class="iconic-seat">
+                                        <i class="bi bi-armchair-fill"></i>
+                                        <span class="seat-label">{{ (seat.seatNumber || seat.number) }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Legend -->
-            <div class="d-flex justify-content-center flex-wrap gap-4 mt-5 text-white-50">
-                <div class="d-flex align-items-center">
-                    <div class="seat-box available me-2" style="width:20px;height:20px;"></div> Available
+            <!-- Legend (Bottom Positioned) -->
+            <div class="legend-panel-bottom d-flex justify-content-center gap-4 py-3">
+                <div class="l-item">
+                    <div class="legend-box available"><i class="bi bi-armchair-fill"></i></div>
+                    <small>Available</small>
                 </div>
-                <div class="d-flex align-items-center">
-                    <div class="seat-box selected me-2" style="width:20px;height:20px;"></div> Selected
+                <div class="l-item">
+                    <div class="legend-box selected"><i class="bi bi-armchair-fill"></i></div>
+                    <small>Selected</small>
                 </div>
-                <div class="d-flex align-items-center">
-                    <div class="seat-box booked me-2" style="width:20px;height:20px;"></div> Booked
+                <div class="l-item">
+                    <div class="legend-box booked"><i class="bi bi-armchair-fill"></i></div>
+                    <small>Booked</small>
                 </div>
-            </div>
-
-            <!-- Footer -->
-            <div
-                class="booking-footer bg-dark-theme p-3 mt-4 fixed-bottom border-top border-secondary glass-card rounded-0">
-                <div class="container d-flex justify-content-between align-items-center">
-                    <div>
-                        <h4 class="text-white mb-0">Total: <span class="text-success">₹{{ totalAmount }}</span></h4>
-                        <small class="text-muted">{{ selectedSeats.length }} of {{ seatQuantity }} seats
-                            selected</small>
-                    </div>
-                    <button class="btn btn-success px-5 py-2 fw-bold shadow-lg"
-                        [disabled]="selectedSeats.length !== seatQuantity" (click)="proceedToBook()">
-                        Proceed to Pay <i class="bi bi-credit-card ms-2"></i>
-                    </button>
+                <div class="l-item">
+                    <div class="legend-box blocked"><i class="bi bi-armchair-fill"></i></div>
+                    <small>Blocked</small>
                 </div>
             </div>
 
-            <div style="height: 100px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Premium Checkout Island -->
+<div class="fixed-bottom p-4 d-flex justify-content-center" *ngIf="bookingStage === 'SELECTION'">
+    <div class="glass-island d-flex align-items-center justify-content-between px-4 py-3 shadow-lg">
+        <div class="d-flex align-items-center">
+            <div class="price-bubble me-3">
+                <span class="text-uppercase tiny opacity-50 d-block">Subtotal</span>
+                <span class="h4 mb-0 fw-bold">₹{{ totalAmount }}</span>
+            </div>
+            <div class="selection-status d-none d-md-block border-start border-secondary ps-3 ms-2">
+                <div class="text-white small" *ngIf="selectedSeats.length < seatQuantity">
+                    <i class="bi bi-info-circle text-accent-neon me-1"></i>
+                    Select {{ seatQuantity - selectedSeats.length }} more
+                </div>
+                <div class="text-accent-neon small fw-bold" *ngIf="selectedSeats.length === seatQuantity">
+                    <i class="bi bi-check-circle-fill me-1"></i> Ready to Book
+                </div>
+            </div>
         </div>
 
+        <button class="btn btn-neon-checkout px-5 py-2 rounded-pill fw-bold"
+            [disabled]="selectedSeats.length !== seatQuantity" (click)="proceedToBook()">
+            PROCEED TO PAY <i class="bi bi-arrow-right ms-2"></i>
+        </button>
     </div>
 </div>

@@ -1,165 +1,451 @@
 /* booking.component.css */
 
-/* Background & Containers */
+/* 1. Immersive Deep Space Background */
 .booking-container {
     min-height: 100vh;
-    background: radial-gradient(circle at center, #1a2a3a 0%, #0d0d0d 100%);
+    background-color: #050505;
+    /* Deep black */
+    background-image:
+        radial-gradient(circle at 50% 0%, rgba(112, 0, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 100%, rgba(0, 245, 212, 0.1) 0%, transparent 50%);
     color: #fff;
-    padding-bottom: 5rem;
+    padding-bottom: 8rem;
+    /* Space for footer */
+    padding-top: 80px;
 }
 
-/* Glassmorphism Card */
-.glass-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* Glass Cards */
+.glass-panel {
+    background: rgba(30, 30, 35, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 16px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-/* Header */
-.booking-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.3);
+/* Stage 1: Quantity Selector Grid */
+.quantity-grid {
+    perspective: 1000px;
 }
 
-/* Stepper Control ([ - 1 + ]) */
-.stepper-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    background: transparent;
-    color: white;
-    font-size: 1.2rem;
+.qty-item {
+    width: 50px;
+    height: 50px;
+    background: #1a1b21;
+    border: 1px solid #333;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
+    font-weight: 600;
+    color: #fff;
     cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.stepper-btn:hover:not(:disabled) {
-    border-color: var(--bs-primary);
-    background: var(--bs-primary);
-    color: white;
+.qty-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-3px);
 }
 
-.stepper-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    border-color: rgba(255, 255, 255, 0.1);
+.qty-item.active {
+    background: var(--accent-blue);
+    border-color: #55aaff;
+    transform: scale(1.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* NEW: Input inside stepper */
-.stepper-input {
-    width: 60px;
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    background: transparent;
-    border: none;
-    color: white;
-    outline: none;
-    -moz-appearance: textfield;
-    /* Remove arrows */
-}
-
-.stepper-input::-webkit-outer-spin-button,
-.stepper-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.stepper-input:focus {
-    border-bottom: 2px solid var(--bs-primary);
-}
-
-/* Price Tiers */
-.price-tier-item {
-    padding: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    transition: background 0.2s;
-}
-
-.price-tier-item:last-child {
-    border-bottom: none;
-}
-
-.price-tier-item:hover {
-    background: rgba(255, 255, 255, 0.03);
-}
-
-/* Seat Matrix Styles (Preserving existing logic) */
-.screen-visual {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
-    height: 60px;
+.cinema-screen {
     width: 80%;
-    margin: 0 auto;
-    border-top: 4px solid rgba(255, 255, 255, 0.5);
-    border-radius: 50% 50% 0 0 / 20px 20px 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 -10px 20px rgba(255, 255, 255, 0.05);
+    /* Takes 80% width of the seats-matrix */
+    height: 14px;
+    background: #fff;
+    border-radius: 50% / 100% 100% 0 0;
+    box-shadow:
+        0 20px 40px rgba(255, 255, 255, 0.4),
+        0 0 120px rgba(112, 0, 255, 0.3);
+    position: relative;
+    /* Centering handled by parent: .cinema-screen-container { align-items: center } */
 }
 
+.screen-text {
+    margin-top: 25px;
+    font-size: 12px;
+    font-weight: 900;
+    color: #555;
+    letter-spacing: 15px;
+    text-transform: uppercase;
+}
+
+/* --- Boxed Seat Matrix Grid --- */
+.booking-matrix-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    padding: 30px 0;
+    -webkit-overflow-scrolling: touch;
+    /* Removed flex-centering which causes left-side cutoff on mobile */
+}
+
+.seats-matrix {
+    width: fit-content;
+    min-width: 800px;
+    /* Force minimum width for matrix */
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Removed margin: 0 auto to prevent left-side cutoff on mobile */
+}
+
+/* Centering on larger screens only */
+@media (min-width: 801px) {
+    .seats-matrix {
+        margin: 0 auto;
+    }
+}
+
+/* Ensure the screen follows the matrix width and scrolls with it */
+.cinema-screen-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 70px;
+}
+
+/* Explicit badge styling for centering in scrollable view */
+.section-badge {
+    background: rgba(0, 0, 0, 0.4);
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #aaa;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Rounded Seat Boxes */
 .seat-box {
-    width: 35px;
-    height: 35px;
-    border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    /* More rounded as requested */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 0.75rem;
-    transition: all 0.2s;
-    background: #2c2c2c;
-    color: #aaa;
-    font-weight: bold;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* STRICT US-07: Available = Green */
+/* States based on the Box */
 .seat-box.available {
-    background-color: transparent;
-    border-color: #28a745;
-    color: #28a745;
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .seat-box.available:hover {
-    background-color: #28a745;
-    color: white;
-    transform: scale(1.1);
-    box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #fff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
 }
 
-/* STRICT US-07: Selected = Yellow */
 .seat-box.selected {
-    background-color: #ffc107;
-    border-color: #ffc107;
-    color: #000;
-    /* Black text on yellow for contrast */
-    box-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
-    transform: scale(1.1);
+    background: #7000FF !important;
+    border-color: #7000FF;
+    box-shadow: 0 0 25px rgba(112, 0, 255, 0.5);
 }
 
-/* STRICT US-07: Booked = Red */
 .seat-box.booked {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: white;
-    opacity: 0.6;
+    background: #0a0a0c !important;
+    /* Extremely dark */
+    border-color: rgba(255, 255, 255, 0.05);
     cursor: not-allowed;
+    opacity: 0.4;
 }
 
-/* Legend update helper */
-.legend-label {
-    font-size: 0.9rem;
-    opacity: 0.8;
+.seat-box.blocked {
+    background: #1a1a1f !important;
+    border-color: #b8860b;
+    /* Muted Gold/Amber for Blocked distinction */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Iconic Armchair (Inside the box) */
+.iconic-seat {
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    pointer-events: none;
+    color: #444;
+}
+
+.seat-box.available .iconic-seat {
+    color: #888;
+}
+
+.seat-box.selected .iconic-seat {
+    color: #fff;
+}
+
+.seat-box.booked .iconic-seat {
+    color: #222;
+}
+
+.seat-box.blocked .iconic-seat {
+    color: #b8860b;
+}
+
+/* Same hint of gold for the icon */
+
+.seat-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 900;
+    color: #fff;
+    margin-top: -2px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 1);
+}
+
+/* Floating Checkout Island */
+.fixed-bottom {
+    z-index: 1050;
+    /* Above modal/navbar standard headers (usually 1030) */
+}
+
+.glass-island {
+    width: 100%;
+    max-width: 850px;
+    background: rgba(10, 10, 15, 0.9);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.btn-neon-checkout {
+    background: var(--primary-brand);
+    color: #fff;
+    box-shadow: 0 4px 15px var(--primary-glow);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-neon-checkout:hover:not(:disabled) {
+    background: #fff;
+    color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px var(--primary-glow);
+}
+
+/* Legend (Bottom Positioned) */
+.legend-panel-bottom {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 12px 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 20px auto 140px;
+    /* Large bottom margin to clear floating checkout button */
+    width: fit-content;
+    z-index: 10;
+}
+
+.l-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    /* Brighter text for visibility */
+}
+
+.legend-box {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.legend-box.available {
+    background: rgba(120, 120, 120, 0.2);
+    color: #aaa;
+}
+
+.legend-box.selected {
+    background: #7000FF;
+    border-color: #7000FF;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(112, 0, 255, 0.5);
+}
+
+.legend-box.booked {
+    background: #000;
+    border-color: #333;
+    color: #333;
+    opacity: 1;
+}
+
+/* Solid for legend */
+.legend-box.blocked {
+    background: #1a1a1f;
+    border-color: #b8860b;
+    color: #b8860b;
+    opacity: 1;
+}
+
+.row-id {
+    font-size: 12px;
+    font-family: monospace;
+}
+
+/* --- Mobile-First Responsive Overrides --- */
+
+@media (max-width: 768px) {
+    .booking-container {
+        padding-top: 70px;
+        padding-bottom: 7rem;
+    }
+
+    /* Stage 1: Quantity */
+    .qty-item {
+        width: 42px;
+        height: 42px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+
+    .quantity-grid {
+        gap: 10px !important;
+    }
+
+    /* Stage 2: Interactive Map */
+    .interactive-seat-container {
+        height: 55vh;
+        /* Shorter on mobile to see more context */
+        margin: 0 -15px;
+        /* Bleed to edges on mobile */
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .seat-body {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Reposition Overlays for Thumb Reach */
+    .minimap-panel {
+        top: 10px;
+        left: 10px;
+        width: 90px;
+    }
+
+    .minimap-body {
+        height: 50px;
+    }
+
+    .zoom-panel {
+        bottom: 15px;
+        right: 15px;
+        flex-direction: row;
+        /* Horizontal on mobile for thumb usage */
+    }
+
+    .zoom-btn {
+        width: 45px;
+        height: 45px;
+    }
+
+    /* Larger touch targets */
+    .zoom-divider {
+        width: 1px;
+        height: 20px;
+        border-left: 1px solid #333;
+        margin: auto 0;
+    }
+
+    .zoom-badge {
+        bottom: 65px;
+        right: 15px;
+        font-size: 8px;
+    }
+
+    /* Mobile Checkout Island lifted */
+    .fixed-bottom {
+        bottom: 80px !important;
+        /* Lifts button above bottom navbar */
+    }
+
+    .glass-island {
+        max-width: 95%;
+        border-radius: 20px;
+        padding: 12px 15px !important;
+    }
+
+    .btn-neon-checkout {
+        padding: 10px 20px !important;
+        font-size: 0.85rem;
+    }
+
+    .price-bubble .h4 {
+        font-size: 1.2rem;
+    }
+
+    .tiny {
+        font-size: 8px !important;
+    }
+
+    .screen-visual {
+        max-width: 80%;
+    }
+
+    /* Move Legend to bottom with proper mobile spacing */
+    .legend-panel-bottom {
+        width: 100% !important;
+        max-width: 95%;
+        margin: 20px auto 180px !important;
+        /* Lifts it clearly above the checkout island */
+        flex-wrap: wrap;
+        gap: 15px !important;
+        padding: 15px !important;
+    }
+
+    .l-item {
+        font-size: 11px !important;
+        gap: 8px !important;
+    }
+
+    .legend-box {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 14px !important;
+    }
+
+    .row-id {
+        font-size: 14px;
+        margin-right: 5px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .seat-body {
+        width: 20px;
+        height: 20px;
+    }
+
+    .seats-matrix {
+        padding: 20px 10px;
+    }
 }

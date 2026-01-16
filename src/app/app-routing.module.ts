@@ -11,10 +11,12 @@ import { TicketComponent } from './components/ticket/ticket.component';
 import { ScreenMatrixComponent } from './components/screen-matrix/screen-matrix.component';
 import { AddMovieComponent } from './components/add-movie/add-movie.component';
 import { AdminGuard } from './guards/admin.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 import { ManageShowsComponent } from './components/manage-shows/manage-shows.component';
 import { ManageScreensComponent } from './components/manage-screens/manage-screens.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 const routes: Routes = [
@@ -29,6 +31,7 @@ const routes: Routes = [
   { path: 'movie/:id', component: MovieDetailsComponent },
   { path: 'movie/:id/shows', component: ScreenMatrixComponent }, // New Route for US-05
   { path: 'booking/:showId', component: BookingComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'payment', component: PaymentComponent }, // Expects data via state or service
   { path: 'ticket/:bookingId', component: TicketComponent },
   { path: '**', redirectTo: 'login' }

@@ -1,22 +1,41 @@
 <div class="container-fluid screen-matrix-container px-0" *ngIf="movie">
 
     <!-- Hero Header -->
-    <div class="movie-header mb-5">
+    <div class="movie-header mb-4">
         <div class="container">
-            <div class="d-flex align-items-center">
-                <a [routerLink]="['/movie', movie.id]"
-                    class="btn btn-link text-decoration-none text-secondary back-btn p-0 me-4">
-                    <i class="bi bi-arrow-left fs-4"></i>
-                </a>
-                <div>
-                    <h1 class="display-5 fw-bold text-white mb-1">{{ movie.title }}</h1>
-                    <div class="d-flex align-items-center gap-3 text-muted small">
-                        <span><i class="bi bi-calendar-event me-1"></i> {{ movie.releaseDate | date:'mediumDate'
-                            }}</span>
-                        <span>|</span>
-                        <span><i class="bi bi-clock me-1"></i> {{ movie.durationMinutes }} mins</span>
-                        <span>|</span>
-                        <span class="badge bg-secondary">{{ movie.genre }}</span>
+            <div class="row align-items-center">
+                <!-- Movie Info (Left) -->
+                <div class="col-md-7 mb-3 mb-md-0">
+                    <div class="d-flex align-items-center">
+                        <a [routerLink]="['/movie', movie.id]"
+                            class="btn btn-link text-decoration-none text-secondary back-btn p-0 me-4">
+                            <i class="bi bi-arrow-left fs-4"></i>
+                        </a>
+                        <div>
+                            <h1 class="display-5 fw-bold text-white mb-1">{{ movie.title }}</h1>
+                            <div class="d-flex align-items-center gap-3 text-muted small">
+                                <span><i class="bi bi-calendar-event me-1"></i> {{ movie.releaseDate | date:'mediumDate'
+                                    }}</span>
+                                <span>|</span>
+                                <span><i class="bi bi-clock me-1"></i> {{ movie.durationMinutes }} mins</span>
+                                <span>|</span>
+                                <span class="badge badge-soft-gold">{{ movie.genre }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rich Search Bar (Right) -->
+                <div class="col-md-5">
+                    <div class="glass-search-wrapper">
+                        <i class="bi bi-search text-accent-neon ms-3"></i>
+                        <input type="text" class="form-control bg-transparent text-white border-0 shadow-none"
+                            placeholder="Filter by theatre, time, or format..." [(ngModel)]="searchTerm"
+                            (ngModelChange)="applyFilter()">
+                        <div class="vr bg-secondary mx-2 h-50 my-auto opacity-25"></div>
+                        <span class="text-muted small me-3 text-nowrap" *ngIf="searchTerm">
+                            {{ filteredRowCount }} found
+                        </span>
                     </div>
                 </div>
             </div>
@@ -41,17 +60,19 @@
 
         <!-- Matrix Content -->
         <div *ngIf="!loading && shows.length > 0">
+
             <h6 class="section-title mb-4">Select Theatre & Time</h6>
 
             <div class="row g-4">
-                <!-- Iterate through grouped shows -->
-                <div class="col-12" *ngFor="let group of groupedShows | keyvalue">
+                <!-- Iterate through FILTERED grouped shows -->
+                <div class="col-12" *ngFor="let group of filteredGroupedShows | keyvalue">
                     <div class="theatre-card">
                         <!-- Theatre Header -->
                         <div class="card-header-pulse d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
-                                <div class="bg-dark rounded-circle p-2 me-3 border border-secondary">
-                                    <i class="bi bi-film text-danger fs-5"></i>
+                                <!-- Rich Icon Placeholder -->
+                                <div class="theatre-logo-placeholder me-3">
+                                    <i class="bi bi-building"></i>
                                 </div>
                                 <div>
                                     <h5 class="text-white m-0 fw-bold">{{ group.key }}</h5>

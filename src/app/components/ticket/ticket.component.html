@@ -1,81 +1,133 @@
-<div class="container mt-5">
-    <div *ngIf="loading" class="text-center text-white">
-        <div class="spinner-border" role="status"></div>
+<div class="row justify-content-center">
+    <!-- State: Loading -->
+    <div *ngIf="loading" class="col-12 text-center text-white py-5">
+        <div class="spinner-border text-accent mb-3" role="status"></div>
+        <p class="text-white-50 letter-spacing">Generating your hologram ticket...</p>
     </div>
 
-    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <!-- State: Error -->
+    <div *ngIf="error" class="col-md-6 text-center mt-5 glass-card fade-in p-5">
+        <i class="bi bi-exclamation-triangle-fill fs-1 mb-3 text-danger"></i>
+        <h4 class="text-white">Ticket Not Found</h4>
+        <p class="text-white-50 mb-4">{{ error }}</p>
+        <a routerLink="/home" class="btn btn-primary px-4">Return Home</a>
+    </div>
 
-    <div *ngIf="ticket && !loading" class="ticket-container animated-entry">
-        <!-- Ticket Header -->
-        <div class="ticket-header p-4 bg-primary-gradient text-white">
-            <h2 class="mb-0 text-center"><i class="bi bi-ticket-perforated"></i> Your Ticket</h2>
-            <div class="text-center mt-2 small text-uppercase letter-spacing">Booking ID: #{{ ticket.id || bookingId }}
-            </div>
-        </div>
-
-        <!-- Ticket Body -->
-        <div class="ticket-body p-4 bg-dark-card">
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <img [src]="ticket.moviePosterUrl || 'assets/placeholder.jpg'"
-                        class="img-fluid rounded poster-small mb-3" alt="Movie Poster">
-                </div>
-                <div class="col-md-8">
-                    <h3 class="text-white fw-bold">{{ ticket.movieTitle }}</h3>
-                    <p class="text-muted"><i class="bi bi-geo-alt"></i> {{ ticket.theatreName }}, {{ ticket.city }}</p>
-
-                    <div class="row mt-4">
-                        <div class="col-6 mb-3">
-                            <small class="text-muted d-block text-uppercase">Date</small>
-                            <span class="text-white fw-bold">{{ ticket.showDate }}</span>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <small class="text-muted d-block text-uppercase">Time</small>
-                            <span class="text-accent fw-bold">{{ ticket.showTime }}</span>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <small class="text-muted d-block text-uppercase">Screen</small>
-                            <span class="text-white">{{ ticket.screenName || 'Screen 1' }}</span>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <small class="text-muted d-block text-uppercase">Seats</small>
-                            <span class="text-accent fw-bold">{{ ticket.seatNumbers.join(', ') }}</span>
-                        </div>
+    <!-- State: Success (Hologram Ticket) -->
+    <div *ngIf="ticket && !loading" class="col-12">
+        <div class="ticket-container">
+            <div class="ticket-card">
+                <!-- Top: Visual Header -->
+                <div class="ticket-visual">
+                    <div class="ticket-bg-blur"
+                        [style.backgroundImage]="'url(' + (ticket.moviePosterUrl || 'assets/placeholder.jpg') + ')'">
                     </div>
-
-                    <div class="booking-summary mt-3 p-3 rounded bg-void border border-secondary">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="text-muted">Seat Cost</span>
-                            <span class="text-white">₹{{ ticket.seatCost }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="text-muted">Conv. Fee</span>
-                            <span class="text-white">₹{{ ticket.convenienceFee }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="text-muted">GST</span>
-                            <span class="text-white">₹{{ ticket.gst }}</span>
-                        </div>
-                        <hr class="bg-secondary">
-                        <div class="d-flex justify-content-between">
-                            <span class="text-accent fw-bold">Total Paid</span>
-                            <span class="text-accent fw-bold fs-5">₹{{ ticket.totalAmount }}</span>
-                        </div>
-                        <div class="mt-2 text-center text-success small">
-                            <i class="bi bi-check-circle-fill"></i> Paid (TXN: {{ ticket.transactionId }})
+                    <div class="ticket-poster-overlay">
+                        <div class="w-100">
+                            <h2 class="movie-title text-white">{{ ticket.movieTitle }}</h2>
+                            <div class="theatre-info">
+                                <i class="bi bi-geo-alt-fill text-accent"></i> {{ ticket.theatreName }}, {{ ticket.city
+                                }}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Ticket Footer -->
-        <div
-            class="ticket-footer p-3 bg-dark-theme text-center border-top border-secondary d-flex justify-content-center gap-3">
-            <button class="btn btn-outline-light" (click)="printTicket()">
-                <i class="bi bi-printer"></i> Print
-            </button>
-            <a routerLink="/home" class="btn btn-primary">Go Home</a>
+                <!-- Middle: Ticket Body -->
+                <div class="ticket-body">
+                    <!-- Date & Time Grid -->
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <div class="info-label">Date</div>
+                            <div class="info-value">
+                                <i class="bi bi-calendar-event me-2 text-accent"></i> {{ ticket.showDate | date:'d MMM'
+                                }}
+                            </div>
+                        </div>
+                        <div class="col-6 text-end">
+                            <div class="info-label">Time</div>
+                            <div class="info-value neon">
+                                {{ ticket.showTime }} <i class="bi bi-clock-history ms-1"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Screen & Seats Grid -->
+                    <div class="row mb-2">
+                        <div class="col-4">
+                            <div class="info-label">Screen</div>
+                            <div class="info-value">{{ ticket.screenName || 'AUDI 1' }}</div>
+                        </div>
+                        <div class="col-8 text-end">
+                            <div class="info-label">Seats</div>
+                            <div class="info-value">
+                                <span class="badge bg-warning text-dark me-2" *ngIf="ticket.seatType">{{ ticket.seatType
+                                    }}</span>
+                                <span class="seats-badge">{{ ticket.seatNumbers.join(', ') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price Breakdown (New) -->
+                    <div class="mt-4 pt-3 border-top border-secondary">
+                        <div class="d-flex justify-content-between mb-1 text-white-50 small">
+                            <span>Seat Price</span>
+                            <span>₹{{ ticket.seatCost | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1 text-white-50 small">
+                            <span>Convenience Fee</span>
+                            <span>₹{{ ticket.convenienceFee | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2 text-white-50 small">
+                            <span>GST</span>
+                            <span>₹{{ ticket.gst | number:'1.2-2' }}</span>
+                        </div>
+
+                        <!-- Discount Row (New) -->
+                        <div class="d-flex justify-content-between mb-2 text-success small"
+                            *ngIf="ticket.discountAmount > 0">
+                            <span>Discount Applied</span>
+                            <span>- ₹{{ ticket.discountAmount | number:'1.2-2' }}</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="text-white small text-uppercase letter-spacing">Total Paid</span>
+                            <span class="text-accent fs-4 fw-bold">₹{{ ticket.totalAmount | number:'1.2-2' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perforated Tear Line -->
+                <div class="cut-line"></div>
+
+                <!-- Bottom: Verification Stub -->
+                <div class="ticket-stub position-relative">
+                    <div class="success-icon">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+
+                    <div class="qr-box">
+                        <!-- Secure QR Code (Backend Generated Payload) -->
+                        <img [src]="'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + (qrPayload || ticket.id || bookingId)"
+                            class="qr-img" alt="Scan Secure Ticket">
+                    </div>
+
+                    <div>
+                        <div class="info-label">Booking ID</div>
+                        <div class="txn-id">#{{ ticket.id || bookingId }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Actions -->
+            <div class="action-bar">
+                <button class="btn-action" (click)="printTicket()">
+                    <i class="bi bi-download"></i> Save
+                </button>
+                <a routerLink="/home" class="btn-action">
+                    <i class="bi bi-house"></i> Home
+                </a>
+            </div>
         </div>
     </div>
 </div>

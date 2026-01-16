@@ -1,62 +1,130 @@
-<div class="container">
-    <div class="form-container">
-        <h2 class="text-center mb-4 text-warning">Add New Movie</h2>
+<div class="admin-page-container fade-in">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="glass-form-panel p-4 p-md-5">
+                    <!-- Form Header -->
+                    <div class="d-flex justify-content-between align-items-start mb-5">
+                        <div>
+                            <h6 class="text-uppercase tracking-widest text-neon-gold mb-2">Metadata Entry</h6>
+                            <h2 class="text-white neon-text display-6 fw-bold mb-0">Add New Movie</h2>
+                        </div>
+                        <i class="bi bi-film display-3 text-white-50 opacity-25"></i>
+                    </div>
 
-        <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
-        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+                    <!-- Alerts -->
+                    <div *ngIf="successMessage" class="alert-cyber success mb-4">
+                        <i class="bi bi-check-circle-fill me-2"></i> {{ successMessage }}
+                    </div>
+                    <div *ngIf="errorMessage" class="alert-cyber error mb-4">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+                    </div>
 
-        <form [formGroup]="movieForm" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-                <label for="title" class="form-label">Movie Title</label>
-                <input type="text" id="title" class="form-control" formControlName="title">
-            </div>
+                    <form [formGroup]="movieForm" (ngSubmit)="onSubmit()">
+                        <!-- Section 1: Core Details -->
+                        <h5 class="section-label">Core Identity</h5>
+                        <div class="row g-4 mb-4">
+                            <div class="col-12">
+                                <div class="form-group-premium">
+                                    <label for="title" class="premium-label">Movie Title</label>
+                                    <input type="text" id="title" class="form-control-premium" formControlName="title"
+                                        placeholder="Enter full movie title">
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
 
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea id="description" class="form-control" rows="3" formControlName="description"></textarea>
-            </div>
+                            <div class="col-12">
+                                <div class="form-group-premium">
+                                    <label for="description" class="premium-label">Synopsis</label>
+                                    <textarea id="description" class="form-control-premium" rows="4"
+                                        formControlName="description" placeholder="Short plot summary..."></textarea>
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="genre" class="form-label">Genre</label>
-                    <input type="text" id="genre" class="form-control" formControlName="genre"
-                        placeholder="e.g. Action">
+                        <!-- Section 2: Metadata Grid -->
+                        <h5 class="section-label mt-5">Technical Data</h5>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group-premium">
+                                    <label for="genre" class="premium-label">Genre</label>
+                                    <input type="text" id="genre" class="form-control-premium" formControlName="genre"
+                                        placeholder="Action, Sci-Fi...">
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-premium">
+                                    <label for="language" class="premium-label">Language</label>
+                                    <input type="text" id="language" class="form-control-premium"
+                                        formControlName="language" placeholder="English, Hindi...">
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group-premium">
+                                    <label for="releaseDate" class="premium-label">Release Date</label>
+                                    <input type="date" id="releaseDate" class="form-control-premium"
+                                        formControlName="releaseDate">
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group-premium">
+                                    <label for="durationMinutes" class="premium-label">Duration (mins)</label>
+                                    <input type="number" id="durationMinutes" class="form-control-premium"
+                                        formControlName="durationMinutes" placeholder="120">
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group-premium">
+                                    <label for="censorRating" class="premium-label">Censor Rating</label>
+                                    <select id="censorRating" class="form-control-premium"
+                                        formControlName="censorRating">
+                                        <option value="" disabled selected>Select Rating</option>
+                                        <option value="U">U - Universal</option>
+                                        <option value="UA">UA - Parental Guidance</option>
+                                        <option value="A">A - Adults Only</option>
+                                        <option value="S">S - Specialized</option>
+                                    </select>
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Visuals -->
+                        <h5 class="section-label mt-5">Visual Assets</h5>
+                        <div class="row g-4 mb-5">
+                            <div class="col-12">
+                                <div class="form-group-premium">
+                                    <label for="imageUrl" class="premium-label">Poster Image URL</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-0 text-white-50"><i
+                                                class="bi bi-link-45deg"></i></span>
+                                        <input type="text" id="imageUrl" class="form-control-premium"
+                                            formControlName="imageUrl" placeholder="HTTPS link to vertical poster">
+                                    </div>
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-end gap-3 pt-4 border-top border-secondary">
+                            <button type="button" routerLink="/admin/dashboard"
+                                class="btn btn-outline-light px-4">Cancel</button>
+                            <button type="submit" class="btn-neon-warning px-5" [disabled]="movieForm.invalid">
+                                <span class="d-flex align-items-center">
+                                    <i class="bi bi-plus-lg me-2"></i> Register Movie
+                                </span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="language" class="form-label">Language</label>
-                    <input type="text" id="language" class="form-control" formControlName="language"
-                        placeholder="e.g. English">
-                </div>
             </div>
-
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="releaseDate" class="form-label">Release Date</label>
-                    <input type="date" id="releaseDate" class="form-control" formControlName="releaseDate">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="durationMinutes" class="form-label">Duration (mins)</label>
-                    <input type="number" id="durationMinutes" class="form-control" formControlName="durationMinutes">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="censorRating" class="form-label">Censor Rating</label>
-                    <select id="censorRating" class="form-control" formControlName="censorRating">
-                        <option value="">Select</option>
-                        <option value="U">U</option>
-                        <option value="UA">UA</option>
-                        <option value="A">A</option>
-                        <option value="S">S</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="imageUrl" class="form-label">Image URL</label>
-                <input type="text" id="imageUrl" class="form-control" formControlName="imageUrl"
-                    placeholder="HTTPS link to poster">
-            </div>
-
-            <button type="submit" class="btn btn-submit" [disabled]="movieForm.invalid">Add Movie</button>
-        </form>
+        </div>
     </div>
 </div>

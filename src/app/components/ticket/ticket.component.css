@@ -1,47 +1,262 @@
+/* --- Holographic Ticket Container --- */
 .ticket-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    background-color: var(--bg-card);
+    max-width: 400px;
+    margin: 3rem auto 8rem;
+    position: relative;
+    /* 3D Perspective setup */
+    transform-style: preserve-3d;
+    animation: float-ticket 6s ease-in-out infinite;
 }
 
-.bg-primary-gradient {
-    background: linear-gradient(135deg, var(--primary-brand) 0%, #4a47a3 100%);
+@keyframes float-ticket {
+
+    0%,
+    100% {
+        transform: translateY(0) rotateX(0deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotateX(2deg);
+    }
 }
 
-.bg-void {
-    background-color: var(--bg-void);
-}
-
-.poster-small {
-    max-height: 200px;
+/* Glass Card Base */
+.ticket-card {
+    background: rgba(20, 20, 25, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    position: relative;
 }
 
-.text-accent {
+/* Animated Holographic Border */
+.ticket-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(45deg, transparent 40%, rgba(112, 0, 255, 0.5), rgba(0, 219, 190, 0.5), transparent 60%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: hologlow 4s linear infinite;
+}
+
+@keyframes hologlow {
+    0% {
+        background-position: 0% 50%;
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        background-position: 100% 50%;
+        opacity: 0.3;
+    }
+}
+
+/* --- Top Section: Movie Visual --- */
+/* --- Top Section: Movie Visual --- */
+.ticket-visual {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+}
+
+.ticket-bg-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px) brightness(0.7);
+    transform: scale(1.1);
+}
+
+.ticket-poster-overlay {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+    background: linear-gradient(to top, rgba(20, 20, 25, 1), transparent);
+}
+
+.movie-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    margin-bottom: 5px;
+}
+
+.theatre-info {
+    font-size: 0.8rem;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* --- Middle Section: Ticket Details --- */
+.ticket-body {
+    padding: 25px;
+    position: relative;
+}
+
+/* Perforated Line (Tear Style) */
+.cut-line {
+    position: relative;
+    height: 20px;
+    margin: 10px -25px 25px;
+    background: radial-gradient(circle, transparent 7px, #2a2a35 8px) -10px -10px;
+    background-size: 20px 20px;
+    border-bottom: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+.cut-line::before,
+.cut-line::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    background: #121216;
+    /* Match page bg */
+    border-radius: 50%;
+}
+
+.cut-line::before {
+    left: -10px;
+}
+
+.cut-line::after {
+    right: -10px;
+}
+
+/* Grid Details */
+.info-label {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.info-value.neon {
     color: var(--accent-neon);
+    text-shadow: 0 0 10px rgba(0, 219, 190, 0.3);
 }
 
-.letter-spacing {
+.seats-badge {
+    background: rgba(112, 0, 255, 0.2);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(112, 0, 255, 0.4);
+    font-family: monospace;
+}
+
+/* --- Bottom Section: Verification Stub --- */
+.ticket-stub {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.qr-box {
+    background: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.qr-img {
+    width: 140px;
+    height: 140px;
+    display: block;
+}
+
+.txn-id {
+    font-family: monospace;
+    color: #666;
+    font-size: 0.85rem;
     letter-spacing: 1px;
 }
 
-.animated-entry {
-    animation: slideUp 0.6s ease-out;
+/* Success Checkmark */
+.success-icon {
+    position: absolute;
+    top: -25px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: #00dbbe;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #000;
+    box-shadow: 0 5px 15px rgba(0, 219, 190, 0.4);
+    z-index: 10;
 }
 
-@keyframes slideUp {
-    from {
-        transform: translateY(50px);
-        opacity: 0;
-    }
+/* Actions */
+.action-bar {
+    text-align: center;
+    margin-top: 2rem;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    /* Ensure it sits above the 3D container plane */
+    position: relative;
+    z-index: 100;
+}
 
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+.btn-action {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 50px;
+    transition: all 0.3s;
+    cursor: pointer;
+    /* Ensure explicit pointer */
+    text-decoration: none;
+    /* For the anchor tag */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-action:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-2px);
 }
 
 @media print {
@@ -52,19 +267,34 @@
     .ticket-container,
     .ticket-container * {
         visibility: visible;
+        animation: none !important;
+        transform: none !important;
     }
 
     .ticket-container {
         position: absolute;
         left: 0;
         top: 0;
-        width: 100%;
         margin: 0;
-        box-shadow: none;
+        width: 100%;
+        max-width: 100%;
         border: 1px solid #000;
+        background: #fff !important;
+        color: #000 !important;
     }
 
-    .ticket-footer {
-        display: none !important;
+    .ticket-card {
+        box-shadow: none;
+        border: none;
+    }
+
+    .action-bar {
+        display: none;
+    }
+
+    .info-value,
+    .movie-title {
+        color: #000 !important;
+        text-shadow: none !important;
     }
 }

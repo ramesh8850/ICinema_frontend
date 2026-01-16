@@ -2,40 +2,37 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
-/* Design System: Electric Midnight */
+/* Design System: Electric Midnight (Premium & competitive) */
 :root {
-    --bg-void: #0B0C15;
-    --bg-card: #1A1B29;
-    --primary-brand: #6C63FF;
-    /* Electric Indigo */
-    --accent-neon: #00F5D4;
-    /* Neon Mint */
+    --bg-void: #050505;
+    /* True Black for OLED pop */
+    --bg-card: #121212;
+    /* Material Dark */
+    --glass-surface: rgba(20, 20, 20, 0.7);
+
+    --primary-brand: #7000FF;
+    /* Electric Purple */
+    --primary-glow: rgba(112, 0, 255, 0.5);
+
+    --accent-neon: #00FFC2;
+    /* Cyber Mint */
+    --accent-glow: rgba(0, 255, 194, 0.4);
+
     --text-main: #FFFFFF;
-    --text-muted: #D1D1DB;
-    /* Lighter grey for better visibility */
+    --text-muted: #A0A0A0;
+    /* Premium Grey */
 
-    --status-available: #2D2D3D;
-    --status-booked: #FF4757;
-    --status-selected: #00F5D4;
-}
-
-/* Custom Background Utilities */
-.bg-void {
-    background-color: var(--bg-void) !important;
-}
-
-.bg-card {
-    background-color: var(--bg-card) !important;
-}
-
-.bg-dark-theme {
-    background-color: #0B0C15 !important;
+    --radius-lg: 24px;
+    --radius-sm: 12px;
 }
 
 body {
     background-color: var(--bg-void);
     color: var(--text-main);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    /* Modern stack */
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
 }
 
 /* Scrollbar Styling */

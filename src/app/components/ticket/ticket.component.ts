@@ -10,6 +10,7 @@ import { BookingService } from '../../services/booking.service';
 export class TicketComponent implements OnInit {
   bookingId: number = 0;
   ticket: any | null = null;
+  qrPayload: string = ''; // Backend secure payload for QR
   loading: boolean = true;
   error: string = '';
 
@@ -34,6 +35,7 @@ export class TicketComponent implements OnInit {
     this.bookingService.getTicketDetails(this.bookingId).subscribe({
       next: (res: any) => {
         this.ticket = res.data;
+        this.qrPayload = res.data.qrPayload; // Get secure payload
         this.loading = false;
       },
       error: (err) => {

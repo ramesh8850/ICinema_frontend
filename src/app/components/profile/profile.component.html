@@ -1,0 +1,169 @@
+<div class="admin-page-container fade-in">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <!-- Profile Header -->
+                <div class="glass-panel d-flex justify-content-between align-items-center mb-5 profile-header">
+                    <div class="d-flex align-items-center gap-4">
+                        <div class="avatar-large">
+                            {{ (user?.username || 'U').charAt(0) | uppercase }}
+                        </div>
+                        <div>
+                            <h6 class="text-uppercase tracking-widest text-white-50 small mb-1">User Profile</h6>
+                            <h2 class="text-white display-6 fw-bold mb-1">{{ user?.username }}</h2>
+                            <p class="text-neon-cyan mb-0">{{ user?.email }}</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-neon-danger" (click)="logout()">
+                        <i class="bi bi-power me-2"></i> Logout
+                    </button>
+                </div>
+
+                <!-- Tabs -->
+                <div class="d-flex justify-content-center mb-5">
+                    <ul class="nav nav-pills-premium">
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="activeTab === 'bookings'"
+                                (click)="activeTab = 'bookings'">
+                                <i class="bi bi-ticket-perforated me-2"></i> My Tickets
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="activeTab === 'watchlist'"
+                                (click)="activeTab = 'watchlist'">
+                                <i class="bi bi-heart me-2"></i> Watchlist
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="activeTab === 'settings'"
+                                (click)="activeTab = 'settings'">
+                                <i class="bi bi-gear me-2"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Content Area -->
+                <div [ngSwitch]="activeTab">
+
+                    <!-- My Bookings -->
+                    <div *ngSwitchCase="'bookings'" class="fade-in">
+                        <div *ngIf="loading" class="text-center py-5">
+                            <div class="spinner-border text-neon-cyan" role="status"></div>
+                        </div>
+
+                        <div *ngIf="!loading && bookings.length === 0" class="text-center text-muted py-5 glass-panel">
+                            <i class="bi bi-ticket-perforated display-1 mb-3 opacity-25"></i>
+                            <h4>No Tickets Found</h4>
+                            <p class="mb-4">You haven't booked any shows yet.</p>
+                            <a routerLink="/home" class="btn btn-neon-cyan">Book a Movie</a>
+                        </div>
+
+                        <div class="row g-4" *ngIf="!loading && bookings.length > 0">
+                            <div class="col-12" *ngFor="let booking of bookings">
+                                <div class="ticket-card p-4">
+                                    <div class="ticket-status"
+                                        [ngClass]="booking.bookingStatus === 'CONFIRMED' ? 'status-confirmed' : 'status-pending'">
+                                        {{ booking.bookingStatus }}
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2 text-center d-none d-md-block">
+                                            <i class="bi bi-qr-code-scan display-4 text-white-50"></i>
+                                        </div>
+                                        <div class="col-md-7 border-start border-secondary ps-md-4">
+                                            <h3 class="text-white mb-1">{{ booking.movieTitle }}</h3>
+                                            <p class="text-neon-cyan mb-2"><i class="bi bi-geo-alt-fill me-1"></i> {{
+                                                booking.theatreName }}, {{ booking.city }}</p>
+                                            <div class="d-flex flex-wrap gap-3 text-white-50 small">
+                                                <span><i class="bi bi-calendar-event me-1"></i> {{ booking.showDate
+                                                    }}</span>
+                                                <span><i class="bi bi-clock me-1"></i> {{ booking.showTime }}</span>
+                                                <span><i class="bi bi-people me-1"></i> Seats: {{
+                                                    booking.seatNumbers?.join(', ') || 'N/A' }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 text-end pt-3 pt-md-0">
+                                            <div class="text-white fw-bold h4 mb-3">₹{{ booking.totalAmount }}</div>
+                                            <a [routerLink]="['/ticket', booking.id]"
+                                                class="btn btn-outline-light btn-sm w-100"
+                                                *ngIf="booking.bookingStatus === 'CONFIRMED'">
+                                                View E-Ticket
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ticket-divider"></div>
+                                    <div class="d-flex justify-content-between align-items-center text-white-50 small">
+                                        <span>Booking ID: <span class="text-white font-monospace">{{ booking.id
+                                                }}</span></span>
+                                        <span>Booked on: {{ booking.bookingDate || 'Recently' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Watchlist -->
+                    <div *ngSwitchCase="'watchlist'" class="fade-in">
+                        <div *ngIf="watchlist.length === 0" class="text-center text-muted py-5 glass-panel">
+                            <i class="bi bi-heart-break display-1 mb-3 opacity-25"></i>
+                            <h4>Watchlist Empty</h4>
+                            <p class="mb-4">Save movies you want to watch later.</p>
+                            <a routerLink="/home" class="btn btn-neon-cyan">Explore Movies</a>
+                        </div>
+
+                        <div class="row row-cols-2 row-cols-md-4 g-4">
+                            <div class="col" *ngFor="let movie of watchlist">
+                                <div class="movie-card-glass h-100">
+                                    <img [src]="movie.imageUrl" alt="{{ movie.title }}">
+                                    <button class="btn-remove-glass" (click)="removeFromWatchlist(movie.id)"
+                                        title="Remove from Watchlist">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                    <div class="overlay-actions">
+                                        <div class="text-center px-2">
+                                            <h6 class="text-white mb-3 text-truncate">{{ movie.title }}</h6>
+                                            <a [routerLink]="['/movie', movie.id]" class="btn btn-neon-cyan btn-sm">
+                                                Book Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings -->
+                    <div *ngSwitchCase="'settings'" class="fade-in">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="glass-panel p-5">
+                                    <h4 class="text-white mb-4"><i class="bi bi-shield-lock me-2"></i> Account Security
+                                    </h4>
+                                    <form>
+                                        <div class="mb-4">
+                                            <label class="premium-label mb-2">Registered Email</label>
+                                            <input type="email" class="form-control-glass w-100" [value]="user?.email"
+                                                disabled>
+                                            <div class="form-text text-white-50 mt-2"><i class="bi bi-info-circle"></i>
+                                                Email cannot be changed for security reasons.</div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="premium-label mb-2">Username</label>
+                                            <input type="text" class="form-control-glass w-100" [value]="user?.username"
+                                                disabled>
+                                        </div>
+                                        <button class="btn btn-outline-light w-100" disabled>
+                                            Change Password (Available Soon)
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,87 +1,153 @@
-<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center form-container">
-    <div class="card p-4 shadow-lg form-card">
-        <h2 class="text-center mb-4 neon-text">Manage Shows</h2>
+<div class="admin-page-container fade-in">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="glass-form-panel p-4 p-md-5">
+                    <!-- Form Header -->
+                    <div class="d-flex justify-content-between align-items-start mb-5">
+                        <div>
+                            <h6 class="text-uppercase tracking-widest text-neon-cyan mb-2">Show Scheduler</h6>
+                            <h2 class="text-white neon-text display-6 fw-bold mb-0">Manage Screenings</h2>
+                        </div>
+                        <i class="bi bi-calendar-week display-3 text-white-50 opacity-25"></i>
+                    </div>
 
-        <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
-        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+                    <!-- Alerts -->
+                    <div *ngIf="successMessage" class="alert-cyber success mb-4">
+                        <i class="bi bi-check-circle-fill me-2"></i> {{ successMessage }}
+                    </div>
+                    <div *ngIf="errorMessage" class="alert-cyber error mb-4">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+                    </div>
 
-        <form [formGroup]="showForm" (ngSubmit)="onSubmit()">
+                    <form [formGroup]="showForm" (ngSubmit)="onSubmit()">
+                        <!-- Section 1: Context (Movie & Venue) -->
+                        <h5 class="section-label">Screening Context</h5>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group-premium">
+                                    <label class="premium-label">Select Movie</label>
+                                    <select class="form-control-premium" formControlName="movieId">
+                                        <option value="" disabled selected>Choose a Movie</option>
+                                        <option *ngFor="let movie of movies" [value]="movie.id">{{ movie.title }}
+                                        </option>
+                                    </select>
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
 
-            <!-- Movie Selection -->
-            <div class="mb-3">
-                <label class="form-label text-light">Select Movie</label>
-                <select class="form-select custom-input" formControlName="movieId">
-                    <option value="" disabled>Choose a Movie</option>
-                    <option *ngFor="let movie of movies" [value]="movie.id">
-                        {{ movie.title }}
-                    </option>
-                </select>
-            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-premium">
+                                    <label class="premium-label">Theatre Location</label>
+                                    <select class="form-control-premium" formControlName="theatreId">
+                                        <option value="" disabled selected>Choose a Theatre</option>
+                                        <option *ngFor="let theatre of theatres" [value]="theatre.id">{{ theatre.name }}
+                                            ({{ theatre.city }})</option>
+                                    </select>
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
 
-            <!-- Theatre Selection -->
-            <div class="mb-3">
-                <label class="form-label text-light">Select Theatre</label>
-                <select class="form-select custom-input" formControlName="theatreId">
-                    <option value="" disabled>Choose a Theatre</option>
-                    <option *ngFor="let theatre of theatres" [value]="theatre.id">
-                        {{ theatre.name }} ({{ theatre.city }})
-                    </option>
-                </select>
-            </div>
+                            <div class="col-md-12">
+                                <div class="form-group-premium">
+                                    <label class="premium-label">Auditorium / Screen</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-0 text-white-50"><i
+                                                class="bi bi-display"></i></span>
+                                        <select class="form-control-premium" formControlName="screenId">
+                                            <option value="" disabled selected>Select Screen (Choose Theatre First)
+                                            </option>
+                                            <option *ngFor="let screen of screens" [value]="screen.id">{{
+                                                screen.screenName }} (Cap: {{ screen.totalSeats }})</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                        </div>
 
-            <!-- Screen Selection -->
-            <div class="mb-3">
-                <label class="form-label text-light">Select Screen</label>
-                <select class="form-select custom-input" formControlName="screenId">
-                    <option value="" disabled>Choose a Screen</option>
-                    <option *ngFor="let screen of screens" [value]="screen.id">
-                        {{ screen.screenName }} (Capacity: {{ screen.totalSeats }})
-                    </option>
-                </select>
-            </div>
+                        <!-- Section 2: Timing -->
+                        <h5 class="section-label mt-5">Schedule & Timing</h5>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-4">
+                                <div class="form-group-premium">
+                                    <label class="premium-label">Start Date</label>
+                                    <input type="date" class="form-control-premium" formControlName="showDate">
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group-premium">
+                                    <label class="premium-label">End Date (Optional Range)</label>
+                                    <input type="date" class="form-control-premium" formControlName="endDate"
+                                        placeholder="Same as start if empty">
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group-premium">
+                                    <label class="premium-label">Show Time</label>
+                                    <input type="time" class="form-control-premium" formControlName="showTime">
+                                    <div class="input-focus-line"></div>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="row">
-                <!-- Date -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label text-light">Start Date</label>
-                    <input type="date" class="form-control custom-input" formControlName="showDate">
+                        <!-- Section 3: Dynamic Pricing -->
+                        <h5 class="section-label mt-5">Tier Config</h5>
+                        <div class="pricing-grid p-4 rounded-3 glass-panel-inner">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="price-card-tier text-center">
+                                        <div class="tier-badge silver mb-2">SILVER</div>
+                                        <div class="input-group input-group-sm">
+                                            <span
+                                                class="input-group-text bg-transparent border-secondary text-white">₹</span>
+                                            <input type="number"
+                                                class="form-control bg-transparent text-white border-secondary text-center"
+                                                formControlName="priceSilver">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="price-card-tier text-center">
+                                        <div class="tier-badge gold mb-2">GOLD</div>
+                                        <div class="input-group input-group-sm">
+                                            <span
+                                                class="input-group-text bg-transparent border-warning text-warning">₹</span>
+                                            <input type="number"
+                                                class="form-control bg-transparent text-white border-warning text-center"
+                                                formControlName="priceGold">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="price-card-tier text-center">
+                                        <div class="tier-badge platinum mb-2">PLATINUM</div>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text bg-transparent border-info text-info">₹</span>
+                                            <input type="number"
+                                                class="form-control bg-transparent text-white border-info text-center"
+                                                formControlName="pricePlatinum">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-end gap-3 pt-4 border-top border-secondary mt-4">
+                            <button type="button" routerLink="/admin/dashboard"
+                                class="btn btn-outline-light px-4">Cancel</button>
+                            <button type="submit" class="btn-neon-info px-5" [disabled]="showForm.invalid">
+                                <span class="d-flex align-items-center">
+                                    <i class="bi bi-calendar-plus me-2"></i> Create Shows
+                                </span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <!-- End Date (Optional) -->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label text-light">End Date (Optional)</label>
-                    <input type="date" class="form-control custom-input" formControlName="endDate"
-                        placeholder="Leave empty for single day">
-                </div>
             </div>
-
-            <div class="row">
-                <!-- Time -->
-                <div class="col-md-12 mb-3">
-                    <label class="form-label text-light">Show Time</label>
-                    <input type="time" class="form-control custom-input" formControlName="showTime">
-                </div>
-            </div>
-
-            <!-- Pricing Section -->
-            <h5 class="text-light mt-3 mb-3 border-bottom pb-2">Seat Pricing</h5>
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label text-light">Silver Price</label>
-                    <input type="number" class="form-control custom-input" formControlName="priceSilver">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label text-light">Gold Price</label>
-                    <input type="number" class="form-control custom-input" formControlName="priceGold">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label text-light">Platinum Price</label>
-                    <input type="number" class="form-control custom-input" formControlName="pricePlatinum">
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100 mt-3 btn-neon" [disabled]="showForm.invalid">
-                Add Show
-            </button>
-        </form>
+        </div>
     </div>
 </div>

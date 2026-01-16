@@ -20,6 +20,9 @@ import { AddMovieComponent } from './components/add-movie/add-movie.component';
 import { ManageShowsComponent } from './components/manage-shows/manage-shows.component';
 import { ManageScreensComponent } from './components/manage-screens/manage-screens.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { WebSocketService, rxStompServiceFactory } from './services/websocket.service';
 
 @NgModule({
   declarations: [
@@ -35,10 +38,11 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
     ScreenMatrixComponent,
     BottomNavComponent,
     AddMovieComponent,
-    AddMovieComponent,
     ManageShowsComponent,
     ManageScreensComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    ProfileComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +52,11 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
     ReactiveFormsModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    {
+      provide: WebSocketService,
+      useFactory: rxStompServiceFactory,
+    },
   ],
   bootstrap: [AppComponent]
 })

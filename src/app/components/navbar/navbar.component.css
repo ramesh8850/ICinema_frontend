@@ -1,37 +1,78 @@
+/* Navbar - Electric Midnight */
 .bg-dark-theme {
-    background-color: var(--bg-card);
-    /* Using global variable */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: rgba(12, 12, 12, 0.85);
+    /* Deep dark glass */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .brand-text {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--primary-brand) !important;
-    text-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .nav-link {
-    color: var(--text-muted) !important;
-    transition: color 0.3s;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6) !important;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
 }
 
 .nav-link:hover,
 .nav-link.active {
-    color: var(--text-main) !important;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Auth Buttons */
+.btn-login,
+.btn-register {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 6px 20px !important;
+    margin-left: 10px;
+}
+
+.btn-login:hover {
+    background: #fff;
+    color: #000 !important;
+}
+
+.btn-register {
+    background: var(--primary-brand);
+    border-color: var(--primary-brand);
+    color: #fff !important;
 }
 
 .btn-logout {
     cursor: pointer;
-    color: #ff4757 !important;
+    color: var(--text-muted) !important;
 }
 
-.btn-login {
-    color: var(--accent-neon) !important;
+.btn-logout:hover {
+    color: #ff4d4d !important;
+    background: rgba(255, 77, 77, 0.1);
 }
 
-.navbar {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+.avatar-circle {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, var(--primary-brand), var(--accent-neon));
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    box-shadow: 0 0 10px rgba(112, 0, 255, 0.4);
 }

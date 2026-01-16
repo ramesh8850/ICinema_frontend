@@ -21,6 +21,13 @@
             <i class="bi bi-person-circle fs-4"></i>
             <span class="d-block small">Profile</span>
         </a>
+
+        <!-- Admin Link (Mobile) -->
+        <a routerLink="/admin" *ngIf="isAdmin" routerLinkActive="active"
+            class="nav-item text-center text-decoration-none">
+            <i class="bi bi-shield-lock-fill fs-4 text-warning"></i>
+            <span class="d-block small text-warning">Admin</span>
+        </a>
     </div>
 </div>
 

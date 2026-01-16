@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class BottomNavComponent implements OnInit {
   isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
   showSearch: boolean = false;
   searchQuery: string = '';
 
@@ -17,8 +18,10 @@ export class BottomNavComponent implements OnInit {
   ngOnInit(): void {
     this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
+      this.isAdmin = this.authService.isAdmin(); // Update Admin status on login change
     });
     this.isLoggedIn = this.authService.isLoggedIn();
+    this.isAdmin = this.authService.isAdmin(); // Initial check
   }
 
   toggleSearch() {
