@@ -222,35 +222,7 @@
     transform: scale(1.1);
 }
 
-/* Filter Trigger Bar (Replaces Scroll Container) */
-.filter-trigger-bar {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 12px;
-    padding: 12px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: background 0.2s;
-}
 
-.filter-trigger-bar:active {
-    background: rgba(255, 255, 255, 0.1);
-    transform: scale(0.98);
-}
-
-.filter-label {
-    font-weight: 600;
-    color: #e0e0e0;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
 
 /* Offcanvas (Side Bar) Customization */
 .offcanvas {

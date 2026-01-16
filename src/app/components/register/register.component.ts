@@ -12,6 +12,8 @@ export class RegisterComponent {
   registerForm: FormGroup;
   errorMessage: string = '';
 
+  showPassword = false;
+
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
@@ -19,6 +21,10 @@ export class RegisterComponent {
       password: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
     });
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit() {

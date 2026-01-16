@@ -7,36 +7,34 @@
         <p class="text-white-50 fs-5">Premium bookings for the modern era.</p>
     </div>
 
-    <!-- Floating Filter Island (Mobile Optimized) -->
-    <div class="filter-island-container">
-
-        <!-- 1. Search Bar (Full Width) -->
+    <!-- Floating Search Only -->
+    <div class="filter-island-container justify-content-center">
         <div class="glass-panel search-bar-container">
             <div class="search-input-wrapper">
                 <i class="bi bi-search search-icon"></i>
-                <input type="text" placeholder="Search for movies, actors..." class="search-input" #searchInput
+                <input type="text" placeholder="Search for movies..." class="search-input" #searchInput
                     (keyup)="searchMovies(searchInput.value)">
             </div>
         </div>
-
-        <!-- 2. Filter Toggle Bar (Opens Side Menu) -->
-        <div class="filter-trigger-bar" data-bs-toggle="offcanvas" data-bs-target="#mobileFilters">
-            <div class="filter-label">
-                <i class="bi bi-sliders2"></i> Filter Movies
-            </div>
-            <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-primary rounded-pill" *ngIf="selectedGenres.size + selectedLanguages.size > 0">
-                    {{ selectedGenres.size + selectedLanguages.size }}
-                </span>
-                <i class="bi bi-chevron-right text-muted"></i>
-            </div>
-        </div>
-
     </div>
 
     <!-- Loading State -->
     <div *ngIf="loading" class="text-center py-5">
         <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <!-- Grid Header with Filter Button -->
+    <div class="container d-flex justify-content-between align-items-center mb-4 px-4 mt-5" *ngIf="!loading">
+        <h2 class="text-white fw-bold m-0"><span class="text-primary">Now</span> Showing</h2>
+
+        <button class="btn btn-outline-light rounded-pill px-3 py-2 d-flex align-items-center gap-2"
+            data-bs-toggle="offcanvas" data-bs-target="#mobileFilters">
+            <i class="bi bi-sliders2"></i>
+            <span>Filters</span>
+            <span class="badge bg-primary rounded-pill ms-1" *ngIf="selectedGenres.size + selectedLanguages.size > 0">
+                {{ selectedGenres.size + selectedLanguages.size }}
+            </span>
+        </button>
     </div>
 
     <!-- Immersive Grid -->

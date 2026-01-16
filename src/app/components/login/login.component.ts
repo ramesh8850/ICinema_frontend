@@ -12,11 +12,17 @@ export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
 
+  showPassword = false;
+
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit() {

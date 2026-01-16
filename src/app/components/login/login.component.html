@@ -8,7 +8,13 @@
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label text-muted">Password</label>
-                <input type="password" class="form-control" id="password" formControlName="password">
+                <div class="input-group">
+                    <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="password"
+                        formControlName="password">
+                    <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()">
+                        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+                    </button>
+                </div>
             </div>
 
             <div *ngIf="errorMessage" class="alert alert-danger p-2 mb-3">
