@@ -19,6 +19,7 @@ import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component
 import { AddMovieComponent } from './components/add-movie/add-movie.component';
 import { ManageShowsComponent } from './components/manage-shows/manage-shows.component';
 import { ManageScreensComponent } from './components/manage-screens/manage-screens.component';
+import { ManageTheatresComponent } from './components/manage-theatres/manage-theatres.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -40,6 +41,7 @@ import { WebSocketService, rxStompServiceFactory } from './services/websocket.se
     AddMovieComponent,
     ManageShowsComponent,
     ManageScreensComponent,
+    ManageTheatresComponent,
     AdminDashboardComponent,
     ProfileComponent,
     FooterComponent

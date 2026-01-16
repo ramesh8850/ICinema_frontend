@@ -13,6 +13,7 @@ export interface Theatre {
     id: number;
     name: string;
     city: string;
+    address: string;
     screens?: Screen[];
 }
 
@@ -30,5 +31,9 @@ export class TheatreService {
 
     getScreensByTheatre(theatreId: number): Observable<Screen[]> {
         return this.http.get<Screen[]>(`${environment.apiUrl}/screens/theatre/${theatreId}`);
+    }
+
+    addTheatre(theatre: Theatre): Observable<any> {
+        return this.http.post(this.apiUrl, theatre);
     }
 }

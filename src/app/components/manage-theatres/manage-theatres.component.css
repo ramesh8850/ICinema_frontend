@@ -1,0 +1,78 @@
+/* Electric Midnight Theme Reuse */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.text-neon-cyan {
+    color: #00f5d4;
+    text-shadow: 0 0 10px rgba(0, 245, 212, 0.5);
+}
+
+.text-neon-gold {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Form Styles */
+.form-control {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 12px;
+}
+
+.form-control:focus {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: #00f5d4;
+    box-shadow: 0 0 0 4px rgba(0, 245, 212, 0.1);
+    color: white;
+}
+
+/* Table Styles */
+.table-dark {
+    --bs-table-bg: transparent;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-success {
+    background-color: #00f5d4;
+    border: none;
+    color: #000;
+    font-weight: 600;
+}
+
+.btn-success:hover {
+    background-color: #00dbbe;
+    box-shadow: 0 0 15px rgba(0, 245, 212, 0.4);
+}
+
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Animations */
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

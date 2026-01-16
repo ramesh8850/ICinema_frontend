@@ -15,6 +15,7 @@ import { AuthGuard } from './guards/auth.guard';
 
 import { ManageShowsComponent } from './components/manage-shows/manage-shows.component';
 import { ManageScreensComponent } from './components/manage-screens/manage-screens.component';
+import { ManageTheatresComponent } from './components/manage-theatres/manage-theatres.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AdminGuard] },
   { path: 'admin/add-movie', component: AddMovieComponent, canActivate: [AdminGuard] },
   { path: 'admin/manage-shows', component: ManageShowsComponent, canActivate: [AdminGuard] },
+  { path: 'admin/manage-theatres', component: ManageTheatresComponent, canActivate: [AdminGuard] },
   { path: 'admin/manage-screens', component: ManageScreensComponent, canActivate: [AdminGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
